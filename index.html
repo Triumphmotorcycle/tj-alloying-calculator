@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#17191d">
-  <meta name="description" content="CAST/FORM alloying calculator for gold and platinum jewellery casting.">
+  <meta name="description" content="TJ Hand Crafted alloying calculator for gold, platinum and silver jewellery casting.">
   <title>TJ Hand Crafted · CAST/FORM Alloying Bench</title>
   <style>
     :root {
@@ -122,6 +122,7 @@
       backdrop-filter: blur(16px);
     }
     .topbar-left, .topbar-right { display: flex; align-items: center; gap: 14px; }
+    .topbar-right { position: relative; }
     .menu-button { display: none; }
     .crumb { color: var(--muted); font-size: 12px; }
     .crumb b { color: var(--ink); font-weight: 700; }
@@ -129,8 +130,20 @@
     .context-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--gold); }
     .top-action { border: 1px solid var(--line); border-radius: 8px; padding: 7px 9px; color: var(--muted); background: var(--paper-2); font-size: 11px; }
     .top-action:hover { color: var(--ink); border-color: #c7bba8; }
+    .style-popover { display: none; position: absolute; z-index: 30; top: 43px; right: 72px; width: 246px; padding: 9px; border: 1px solid var(--line); border-radius: 13px; background: var(--paper-2); box-shadow: 0 18px 44px rgba(27,24,18,.18); }
+    .style-popover.open { display: block; animation: rise .18s ease both; }
+    .style-popover-header { padding: 5px 7px 9px; color: var(--muted); font-size: 9px; font-weight: 800; letter-spacing: .13em; text-transform: uppercase; }
+    .style-option { display: flex; align-items: center; gap: 9px; width: 100%; border: 1px solid transparent; border-radius: 9px; padding: 8px; color: var(--ink); background: transparent; text-align: left; }
+    .style-option:hover { border-color: var(--line); background: rgba(210,166,84,.07); }
+    .style-option.active { border-color: var(--gold); background: rgba(210,166,84,.1); }
+    .style-preview { flex: 0 0 auto; width: 31px; height: 25px; overflow: hidden; display: flex; border: 1px solid rgba(0,0,0,.12); border-radius: 6px; background: #f0eee7; }
+    .style-preview i { display: block; height: 100%; }
+    .style-option-copy { min-width: 0; }
+    .style-option-copy strong { display: block; font-size: 10px; }
+    .style-option-copy small { display: block; margin-top: 2px; color: var(--muted); font-size: 9px; }
+    .style-option-check { margin-left: auto; color: var(--gold-dark); font-family: var(--mono); font-size: 10px; }
 
-    .content { max-width: 1500px; margin: 0 auto; padding: 34px 38px 72px; }
+    .content {  max-width: 1500px; margin: 0 auto; padding: 34px 38px 72px; }
     .view { display: none; animation: rise .28s ease both; }
     .view.active { display: block; }
     @keyframes rise { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
@@ -299,8 +312,21 @@
     .color-dot { flex: 0 0 auto; width: 13px; height: 13px; border-radius: 50%; border: 1px solid rgba(0,0,0,.1); box-shadow: inset 0 1px 2px rgba(255,255,255,.45); }
     .selected-recipe-title strong { display: block; max-width: 240px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
     .selected-recipe-title span { display: block; margin-top: 3px; color: var(--muted); font-size: 10px; }
-    .recipe-note { margin: -4px 0 16px; padding: 9px 10px; border-left: 2px solid var(--gold); color: var(--muted); background: #f8f5ed; font-size: 10px; line-height: 1.45; }
-    .recipe-label-input { width: 145px; border: 0; border-bottom: 1px dashed #c9c0b2; outline: 0; padding: 4px 0; color: var(--muted); background: transparent; font-size: 10px; text-align: right; }
+    .recipe-note { margin: -4px 0 12px; padding: 9px 10px; border-left: 2px solid var(--gold); color: var(--muted); background: #f8f5ed; font-size: 10px; line-height: 1.45; }
+    .supplier-meta { display: none; margin: 0 0 16px; padding: 10px; border: 1px solid #d8e0e0; border-radius: 10px; background: #f1f5f4; }
+    .supplier-meta.visible { display: block; }
+    .supplier-meta-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-bottom: 8px; }
+    .supplier-meta-head strong { display: block; color: var(--ink); font-size: 10px; }
+    .supplier-meta-head span { display: block; margin-bottom: 3px; color: var(--muted); font-family: var(--mono); font-size: 8px; text-transform: uppercase; }
+    .supplier-meta-head a { flex: 0 0 auto; color: var(--gold-dark); font-family: var(--mono); font-size: 9px; font-weight: 700; text-decoration: none; }
+    .supplier-meta-head a:hover { text-decoration: underline; }
+    .supplier-specs { display: grid; grid-template-columns: repeat(3,1fr); gap: 5px; }
+    .supplier-spec { min-width: 0; padding: 6px 7px; border-radius: 7px; background: rgba(255,255,255,.72); }
+    .supplier-spec b { display: block; color: var(--muted); font-family: var(--mono); font-size: 8px; font-weight: 400; text-transform: uppercase; }
+    .supplier-spec span { display: block; margin-top: 3px; overflow: hidden; color: var(--ink); font-family: var(--mono); font-size: 9px; text-overflow: ellipsis; white-space: nowrap; }
+    .supplier-unknown { margin-top: 7px; color: #866b38; font-size: 9px; line-height: 1.35; }
+    .supplier-unknown b { color: #654b20; }
+    .recipe-label-input {  width: 145px; border: 0; border-bottom: 1px dashed #c9c0b2; outline: 0; padding: 4px 0; color: var(--muted); background: transparent; font-size: 10px; text-align: right; }
     .recipe-label-input:focus { border-bottom-color: var(--gold-dark); color: var(--ink); }
     .composition-heading { display: grid; grid-template-columns: minmax(100px,1fr) 82px 80px 22px; gap: 7px; padding: 0 2px 7px; color: var(--muted-2); font-family: var(--mono); font-size: 9px; text-transform: uppercase; }
     .composition-heading span:nth-child(2), .composition-heading span:nth-child(3) { text-align: right; }
@@ -476,7 +502,179 @@
     .toast { position: fixed; z-index: 50; right: 24px; bottom: 24px; max-width: 330px; transform: translateY(20px); opacity: 0; pointer-events: none; padding: 11px 14px; border-radius: 10px; color: #fff; background: var(--ink); box-shadow: 0 8px 26px rgba(0,0,0,.2); font-size: 11px; transition: .25s ease; }
     .toast.show { transform: translateY(0); opacity: 1; }
 
-    @media (max-width: 1220px) {
+    /* Starting skins: the calculator keeps the same information architecture while the visual language changes. */
+    body[data-theme="atelier"] {
+      --paper: #f0ebe2;
+      --paper-2: #fffaf3;
+      --ink: #2b211b;
+      --line: #dfd1bc;
+      --muted: #81756a;
+      --muted-2: #a99b8c;
+      --gold: #ad792e;
+      --gold-2: #e6bc6d;
+      --gold-dark: #83551c;
+      --copper: #b9664f;
+    }
+    body[data-theme="atelier"] .sidebar,
+    body[data-theme="atelier"] .result-top { background: #30231c; }
+    body[data-theme="atelier"] h1,
+    body[data-theme="atelier"] h2,
+    body[data-theme="atelier"] h3,
+    body[data-theme="atelier"] h4 { font-family: var(--serif); letter-spacing: -.045em; }
+    body[data-theme="atelier"] .hero-stamp { background: #fff7eb; border-color: #d9c5a9; }
+
+    body[data-theme="ledger"] {
+      --paper: #edf3f1;
+      --paper-2: #ffffff;
+      --ink: #17343a;
+      --line: #c9d9d6;
+      --muted: #637b7e;
+      --muted-2: #92a8a7;
+      --gold: #3c927e;
+      --gold-2: #a6e0c3;
+      --gold-dark: #1e7164;
+      --copper: #bd7558;
+      --sage: #4d9072;
+      --blue: #6087a6;
+    }
+    body[data-theme="ledger"] .sidebar,
+    body[data-theme="ledger"] .result-top { background: #0d2930; }
+    body[data-theme="ledger"] .family-pill.active { background: #f1fbf6; }
+    body[data-theme="ledger"] .notice { border-color: #b9d8c9; background: #f1fbf5; color: #3e6d59; }
+    body[data-theme="ledger"] .notice .notice-icon { background: #72b99a; color: #fff; }
+    body[data-theme="ledger"] .recipe-note { background: #f1f7f5; border-color: var(--gold); }
+    body[data-theme="ledger"] .supplier-meta { border-color: #c6ddda; background: #edf7f5; }
+
+    body[data-theme="foundry"] {
+      --paper: #111416;
+      --paper-2: #1b2023;
+      --ink: #edf2ee;
+      --line: #313a3f;
+      --muted: #9aa5a6;
+      --muted-2: #707b7e;
+      --gold: #dc874c;
+      --gold-2: #f2b577;
+      --gold-dark: #ef9b5f;
+      --copper: #d07655;
+      --sage: #8db497;
+      --blue: #7f9db2;
+      --red: #d47b6e;
+      --shadow: 0 18px 50px rgba(0,0,0,.22);
+    }
+    body[data-theme="foundry"] .sidebar,
+    body[data-theme="foundry"] .result-top { background: #080a0b; }
+    body[data-theme="foundry"] .topbar { background: rgba(17,20,22,.92); border-color: var(--line); }
+    body[data-theme="foundry"] .recipe-card,
+    body[data-theme="foundry"] .input-shell,
+    body[data-theme="foundry"] .metric,
+    body[data-theme="foundry"] .check-item,
+    body[data-theme="foundry"] .style-popover,
+    body[data-theme="foundry"] .source-card { border-color: var(--line); background: #22282c; color: var(--ink); }
+    body[data-theme="foundry"] .recipe-card:hover { border-color: var(--gold); }
+    body[data-theme="foundry"] .recipe-card.active { background: #272d30; }
+    body[data-theme="foundry"] .notice { border-color: #6e542f; background: #2a2419; color: #e6c88d; }
+    body[data-theme="foundry"] .notice .notice-icon { background: #b9803f; color: #17191d; }
+    body[data-theme="foundry"] .region-button,
+    body[data-theme="foundry"] .top-action,
+    body[data-theme="foundry"] .button-secondary { border-color: var(--line); color: var(--ink); background: #202629; }
+    body[data-theme="foundry"] .region-button.active { color: #111416; background: var(--gold-2); border-color: var(--gold-2); }
+    body[data-theme="foundry"] .unit-toggle,
+    body[data-theme="foundry"] .allowance-line,
+    body[data-theme="foundry"] .method-side,
+    body[data-theme="foundry"] .recipe-note,
+    body[data-theme="foundry"] .equation { background: #202629; border-color: var(--line); }
+    body[data-theme="foundry"] .element-select-shell,
+    body[data-theme="foundry"] .pct-shell,
+    body[data-theme="foundry"] .retention-input-shell { border-color: var(--line); background: #151a1d; }
+    body[data-theme="foundry"] .element-select-shell select,
+    body[data-theme="foundry"] .pct-shell input,
+    body[data-theme="foundry"] .retention-input-shell input,
+    body[data-theme="foundry"] .input-shell input { color: var(--ink); }
+    body[data-theme="foundry"] .supplier-meta { border-color: #425158; background: #20282c; }
+    body[data-theme="foundry"] .supplier-spec { background: #171c1f; }
+    body[data-theme="foundry"] .supplier-spec span { color: var(--ink); }
+    body[data-theme="foundry"] .colour-control-off { border-color: var(--line); background: #202629; }
+    body[data-theme="foundry"] .guard-details,
+    body[data-theme="foundry"] .guard-target { border-color: var(--line); background: #202629; }
+    body[data-theme="foundry"] .guard-details[open] { border-color: #765132; background: #27231d; }
+    body[data-theme="foundry"] .guard-content { border-color: var(--line); }
+    body[data-theme="foundry"] .guard-result { background: #2a2419; color: #e4c98f; }
+    body[data-theme="foundry"] .guard-result.good { background: #1e2d25; color: #a8d5b5; }
+    body[data-theme="foundry"] .data-card,
+    body[data-theme="foundry"] .guide-card,
+    body[data-theme="foundry"] .mini-guide,
+    body[data-theme="foundry"] .safety-box { border-color: var(--line); background: var(--paper-2); }
+    body[data-theme="foundry"] .safety-box { background: #2a2419; border-color: #6e542f; }
+    body[data-theme="foundry"] .danger-item { border-color: #6e542f; background: rgba(255,255,255,.035); }
+    body[data-theme="foundry"] .data-footnote { background: #151a1d; border-color: var(--line); }
+    body[data-theme="foundry"] .data-table th,
+    body[data-theme="foundry"] .data-table td { border-color: var(--line); }
+
+    body[data-theme="signal"] {
+      --paper: #090d0a;
+      --paper-2: #141b16;
+      --ink: #eff9ed;
+      --line: #2c3d2e;
+      --muted: #9bb19c;
+      --muted-2: #708573;
+      --gold: #31f51e;
+      --gold-2: #7dff6f;
+      --gold-dark: #23c719;
+      --copper: #ff7e59;
+      --sage: #8bd49a;
+      --blue: #7ea7b5;
+      --red: #ff8578;
+      --shadow: 0 18px 50px rgba(0,0,0,.34);
+    }
+    body[data-theme="signal"] .sidebar,
+    body[data-theme="signal"] .result-top { background: #020403; }
+    body[data-theme="signal"] .topbar { background: rgba(9,13,10,.92); border-color: var(--line); }
+    body[data-theme="signal"] .recipe-card,
+    body[data-theme="signal"] .input-shell,
+    body[data-theme="signal"] .metric,
+    body[data-theme="signal"] .check-item,
+    body[data-theme="signal"] .style-popover,
+    body[data-theme="signal"] .source-card { border-color: var(--line); background: #182119; color: var(--ink); }
+    body[data-theme="signal"] .recipe-card:hover,
+    body[data-theme="signal"] .recipe-card.active { border-color: var(--gold); background: #1c2a1c; }
+    body[data-theme="signal"] .notice { border-color: #4f762f; background: #182313; color: #cbe9a8; }
+    body[data-theme="signal"] .notice .notice-icon { background: var(--gold); color: #020403; }
+    body[data-theme="signal"] .region-button,
+    body[data-theme="signal"] .top-action,
+    body[data-theme="signal"] .button-secondary { border-color: var(--line); color: var(--ink); background: #152018; }
+    body[data-theme="signal"] .region-button.active { color: #020403; background: var(--gold); border-color: var(--gold); }
+    body[data-theme="signal"] .unit-toggle,
+    body[data-theme="signal"] .allowance-line,
+    body[data-theme="signal"] .method-side,
+    body[data-theme="signal"] .recipe-note { background: #182119; border-color: var(--line); }
+    body[data-theme="signal"] .element-select-shell,
+    body[data-theme="signal"] .pct-shell,
+    body[data-theme="signal"] .retention-input-shell { border-color: var(--line); background: #0e150f; }
+    body[data-theme="signal"] .element-select-shell select,
+    body[data-theme="signal"] .pct-shell input,
+    body[data-theme="signal"] .retention-input-shell input,
+    body[data-theme="signal"] .input-shell input { color: var(--ink); }
+    body[data-theme="signal"] .supplier-meta { border-color: #3d5c42; background: #152018; }
+    body[data-theme="signal"] .supplier-spec { background: #0e150f; }
+    body[data-theme="signal"] .supplier-spec span { color: var(--ink); }
+    body[data-theme="signal"] .colour-control-off { border-color: var(--line); background: #182119; }
+    body[data-theme="signal"] .guard-details,
+    body[data-theme="signal"] .guard-target { border-color: var(--line); background: #182119; }
+    body[data-theme="signal"] .guard-details[open] { border-color: #49733f; background: #182313; }
+    body[data-theme="signal"] .guard-content { border-color: var(--line); }
+    body[data-theme="signal"] .guard-result { background: #182313; color: #cbe9a8; }
+    body[data-theme="signal"] .guard-result.good { background: #15271a; color: #aee7b6; }
+    body[data-theme="signal"] .data-card,
+    body[data-theme="signal"] .guide-card,
+    body[data-theme="signal"] .mini-guide,
+    body[data-theme="signal"] .safety-box { border-color: var(--line); background: var(--paper-2); }
+    body[data-theme="signal"] .safety-box { background: #182313; border-color: #4f762f; }
+    body[data-theme="signal"] .danger-item { border-color: #4f762f; background: rgba(255,255,255,.035); }
+    body[data-theme="signal"] .data-footnote { background: #0e150f; border-color: var(--line); }
+    body[data-theme="signal"] .data-table th,
+    body[data-theme="signal"] .data-table td { border-color: var(--line); }
+
+    @media (max-width: 1220px) { 
       .workspace-grid { grid-template-columns: minmax(240px,.85fr) minmax(330px,1.2fr); }
       .result-panel { position: static; grid-column: 1 / -1; }
       .result-panel .panel-pad { display: grid; grid-template-columns: 1fr 1.15fr; }
@@ -570,6 +768,15 @@
         </div>
         <div class="topbar-right">
           <div class="top-context"><span class="context-dot"></span><span id="topContext">Gold · UK · grams</span></div>
+          <button class="top-action" id="styleButton" aria-expanded="false">Style: <b id="styleName">Bench</b></button>
+          <div class="style-popover" id="stylePopover" aria-label="Choose a visual style">
+            <div class="style-popover-header">Pick a starting skin</div>
+            <button class="style-option active" data-theme="bench"><span class="style-preview"><i style="width:52%;background:#f5f2ec"></i><i style="width:48%;background:#d2a654"></i></span><span class="style-option-copy"><strong>Bench</strong><small>warm editorial · current</small></span><span class="style-option-check">✓</span></button>
+            <button class="style-option" data-theme="atelier"><span class="style-preview"><i style="width:52%;background:#f0ebe2"></i><i style="width:48%;background:#ad792e"></i></span><span class="style-option-copy"><strong>Atelier</strong><small>craft-led · serif · warm</small></span><span class="style-option-check"></span></button>
+            <button class="style-option" data-theme="ledger"><span class="style-preview"><i style="width:52%;background:#edf3f1"></i><i style="width:48%;background:#3c927e"></i></span><span class="style-option-copy"><strong>Ledger</strong><small>clean technical · cool</small></span><span class="style-option-check"></span></button>
+            <button class="style-option" data-theme="foundry"><span class="style-preview"><i style="width:52%;background:#111416"></i><i style="width:48%;background:#dc874c"></i></span><span class="style-option-copy"><strong>Foundry</strong><small>dark industrial · copper</small></span><span class="style-option-check"></span></button>
+            <button class="style-option" data-theme="signal"><span class="style-preview"><i style="width:52%;background:#090d0a"></i><i style="width:48%;background:#31f51e"></i></span><span class="style-option-copy"><strong>Signal</strong><small>TJ green · high contrast</small></span><span class="style-option-check"></span></button>
+          </div>
           <button class="top-action" id="printButton">Print sheet</button>
         </div>
       </header>
@@ -599,6 +806,7 @@
           <div class="family-switcher" role="tablist" aria-label="Metal family">
             <button class="family-pill active" data-family="gold" role="tab" aria-selected="true"><span class="family-icon">Au</span><span><strong>Gold</strong><small>carat · colour · fineness</small></span></button>
             <button class="family-pill" data-family="platinum" role="tab" aria-selected="false"><span class="family-icon">Pt</span><span><strong>Platinum</strong><small>Pt fineness · casting route</small></span></button>
+            <button class="family-pill" data-family="silver" role="tab" aria-selected="false"><span class="family-icon">Ag</span><span><strong>Silver</strong><small>fineness · supplier sheets</small></span></button>
           </div>
 
           <div class="workspace-grid">
@@ -668,6 +876,7 @@
                   <input class="recipe-label-input" id="recipeLabelInput" aria-label="Recipe label" value="18 ct Yellow Gold">
                 </div>
                 <div class="recipe-note" id="recipeNote">A classic 75/15/10 yellow starting recipe.</div>
+                <div class="supplier-meta" id="supplierMeta"></div>
 
                 <div class="composition-heading"><span>Element</span><span>Percent</span><span>Weight</span><span></span></div>
                 <div class="composition-rows" id="compositionRows"></div>
@@ -886,7 +1095,8 @@
       Pt: { name: 'Platinum · Pt', color: '#d7dde1', precious: 'platinum' },
       Co: { name: 'Cobalt · Co', color: '#718ba0' },
       Ru: { name: 'Ruthenium · Ru', color: '#69737c' },
-      Ir: { name: 'Iridium · Ir', color: '#8a949b' }
+      Ir: { name: 'Iridium · Ir', color: '#8a949b' },
+      X: { name: 'Supplier X · withheld balance', color: '#aa9c85', unknown: true }
     };
 
     const REGIONS = {
@@ -933,6 +1143,29 @@
       { id:'pt-900-pd', family:'platinum', group:'PtPd', title:'Pt900 Pd', subtitle:'90 Pt / 10 Pd · lower-Pt family', fineness:'900', purity:90, colour:'Cool white-grey', swatch:'linear-gradient(110deg,#899597 0%,#e4e8e6 50%,#677578 100%)', markets:['UK','US','AU','NZ'], composition:[['Pt',90],['Pd',10]], note:'Included as a representative lower-fineness Pt/Pd family; verify marking and local rules before sale.' }
     ];
 
+
+    // User-supplied supplier sheets. Known percentages are copied as stated; "X" is a deliberate placeholder for an undisclosed balance.
+    const SUPPLIER_RECIPES = [
+      { id:'sup-metalor-14y-10074', family:'gold', group:'Supplier sheets · Metalor', title:'Metalor 14Y · 10074', subtitle:'14K Yellow · protective atmosphere', carat:'14K', fineness:'585', purity:58.5, colour:'Yellow', swatch:'linear-gradient(110deg,#c99743 0%,#ecc875 50%,#9e6e2c 100%)', markets:['UK','US','AU','NZ'], supplier:'Metalor Technologies', code:'10074', density:'13.65 g/cm³', meltRange:'825–835 °C', flaskTemp:'≈ 600 °C', castingTemp:'950–1050 °C', cooling:'Air cooling', hardness:'185 HV5', atmosphere:'Protective atmosphere', sourceFile:'datasheets/14Y - 10074-1.PDF', unknownBalance:'21.00%', proxyGuess:'Likely a Cu / proprietary base balance; not verified', composition:[['Au',58.5],['Ag',20.5],['X',21]], note:'Sheet states Au 58.50% and Ag 20.50%. The remaining 21.00% is not itemised; X is kept as a bookkeeping placeholder.' },
+      { id:'sup-metalor-18r-10245', family:'gold', group:'Supplier sheets · Metalor', title:'Metalor 18R · 10245', subtitle:'18K Red 5N · casting pieces', carat:'18K', fineness:'750', purity:75, colour:'Red 5N', swatch:'linear-gradient(110deg,#b66e56 0%,#e3aa8d 48%,#92513f 100%)', markets:['UK','US','AU','NZ'], supplier:'Metalor Technologies', code:'10245', density:'15.10 g/cm³', meltRange:'880–900 °C', flaskTemp:'≈ 600 °C', castingTemp:'1000–1100 °C', cooling:'Air cooling', hardness:'150 HV5', atmosphere:'Protective atmosphere', sourceFile:'datasheets/18R - 10245-1.PDF', unknownBalance:'0.50%', proxyGuess:'Trace / grain-refiner balance not itemised', composition:[['Au',75],['Ag',5],['Cu',19.5],['X',.5]], note:'Sheet states Au 75.00%, Ag 5.00% and Cu 19.50%. The remaining 0.50% is kept as X rather than guessed.' },
+      { id:'sup-metalor-18w-3165', family:'gold', group:'Supplier sheets · Metalor', title:'Metalor 18W · 3165', subtitle:'18K White · Pd / nickel-free', carat:'18K', fineness:'750', purity:75, colour:'White', swatch:'linear-gradient(110deg,#9da7aa 0%,#eef0eb 50%,#78878c 100%)', markets:['UK','US','AU','NZ'], supplier:'Metalor Technologies', code:'3165', density:'15.80 g/cm³', meltRange:'1035–1115 °C', flaskTemp:'≈ 650 °C', castingTemp:'1175–1225 °C', cooling:'Quench in water', hardness:'155 HV5', atmosphere:'Protective atmosphere', sourceFile:'datasheets/18W -3165-1.pdf', unknownBalance:'12.00%', proxyGuess:'Proprietary white balance; do not assume Ag/Cu/Zn', composition:[['Au',75],['Pd',13],['X',12]], note:'Sheet states a nickel-free Au/Pd alloy with Au 75.00% and Pd 13.00%. The remaining 12.00% is not published.' },
+      { id:'sup-metalor-18y-10249', family:'gold', group:'Supplier sheets · Metalor', title:'Metalor 18Y · 10249', subtitle:'18K Yellow 2N · pale yellow', carat:'18K', fineness:'750', purity:75, colour:'Yellow 2N', swatch:'linear-gradient(110deg,#c3a35b 0%,#e9d59a 50%,#907334 100%)', markets:['UK','US','AU','NZ'], supplier:'Metalor Technologies', code:'10249', density:'15.50 g/cm³', meltRange:'880–895 °C', flaskTemp:'≈ 600 °C', castingTemp:'995–1045 °C', cooling:'Quench in water', hardness:'130 HV5', atmosphere:'Protective atmosphere', sourceFile:'datasheets/18Y - 10249-1.pdf', unknownBalance:'9.30%', proxyGuess:'Likely Cu / proprietary base balance; not verified', composition:[['Au',75],['Ag',15.7],['X',9.3]], note:'Sheet states Au 75.00% and Ag 15.70%. The remaining 9.30% is not itemised; X is intentionally preserved.' },
+      { id:'sup-metalor-18y-10250', family:'gold', group:'Supplier sheets · Metalor', title:'Metalor 18Y · 10250', subtitle:'18K Yellow 3N · richer yellow', carat:'18K', fineness:'750', purity:75, colour:'Yellow 3N', swatch:'linear-gradient(110deg,#bd8930 0%,#efcf7e 48%,#a26e25 100%)', markets:['UK','US','AU','NZ'], supplier:'Metalor Technologies', code:'10250', density:'15.65 g/cm³', meltRange:'890–925 °C', flaskTemp:'≈ 600 °C', castingTemp:'1025–1075 °C', cooling:'Quench in water', hardness:'160 HV5', atmosphere:'Protective atmosphere', sourceFile:'datasheets/18Y - 10250-1.PDF', unknownBalance:'12.77%', proxyGuess:'Likely Cu / proprietary base balance; not verified', composition:[['Au',75],['Ag',12.23],['X',12.77]], note:'Sheet states Au 75.00% and Ag 12.23%. The remaining 12.77% is not itemised; X is intentionally preserved.' },
+      { id:'sup-metalor-9r-10068', family:'gold', group:'Supplier sheets · Metalor', title:'Metalor 9R · 10068', subtitle:'9K Red · universal use', carat:'9K', fineness:'375', purity:37.5, colour:'Red', swatch:'linear-gradient(110deg,#a55d43 0%,#d99370 48%,#7c4433 100%)', markets:['UK','US','AU','NZ'], supplier:'Metalor Technologies', code:'10068', density:'11.30 g/cm³', meltRange:'940–975 °C', flaskTemp:'≈ 600 °C', castingTemp:'1040–1075 °C', cooling:'Air cooling', hardness:'100 HV5', atmosphere:'Standard sheet; confirm route', sourceFile:'datasheets/9R - 10068-1.pdf', unknownBalance:'58.90%', proxyGuess:'Likely Cu-rich / proprietary red balance; not verified', composition:[['Au',37.5],['Ag',3.6],['X',58.9]], note:'Sheet states Au 37.50% and Ag 3.60%. The remaining 58.90% is not itemised.' },
+      { id:'sup-metalor-9r-424', family:'gold', group:'Supplier sheets · Metalor', title:'Metalor 9R · 424', subtitle:'9K Red · alternate material code', carat:'9K', fineness:'375', purity:37.5, colour:'Red', swatch:'linear-gradient(110deg,#a55d43 0%,#d99370 48%,#7c4433 100%)', markets:['UK','US','AU','NZ'], supplier:'Metalor Technologies', code:'424', density:'11.30 g/cm³', meltRange:'940–975 °C', flaskTemp:'≈ 600 °C', castingTemp:'1040–1075 °C', cooling:'Air cooling', hardness:'100 HV5', atmosphere:'Standard sheet; confirm route', sourceFile:'datasheets/9R - 424-1.pdf', unknownBalance:'58.90%', proxyGuess:'Likely Cu-rich / proprietary red balance; not verified', composition:[['Au',37.5],['Ag',3.6],['X',58.9]], note:'Sheet states Au 37.50% and Ag 3.60%. The remaining 58.90% is not itemised.' },
+      { id:'sup-metalor-9w-10038', family:'gold', group:'Supplier sheets · Metalor', title:'Metalor 9W · 10038', subtitle:'9K White · standard white', carat:'9K', fineness:'375', purity:37.6, colour:'White', swatch:'linear-gradient(110deg,#aab1b0 0%,#e2e5df 49%,#7f8887 100%)', markets:['UK','US','AU','NZ'], supplier:'Metalor Technologies', code:'10038', density:'12.55 g/cm³', meltRange:'1030–1070 °C', flaskTemp:'≈ 600 °C', castingTemp:'1170–1270 °C', cooling:'Air cooling', hardness:'95 HV5 annealed / 90 HV5 post-cast', atmosphere:'Suitable for casting in air', sourceFile:'datasheets/9W - 10038-1.pdf', unknownBalance:'6.93%', proxyGuess:'Likely Cu / proprietary white balance; not verified', composition:[['Au',37.6],['Ag',55.47],['X',6.93]], note:'Sheet states Au 37.60% and Ag 55.47%. The remaining 6.93% is not itemised.' },
+      { id:'sup-metalor-9w-425', family:'gold', group:'Supplier sheets · Metalor', title:'Metalor 9W · 425', subtitle:'9K White · alternate material code', carat:'9K', fineness:'375', purity:37.6, colour:'White', swatch:'linear-gradient(110deg,#aab1b0 0%,#e2e5df 49%,#7f8887 100%)', markets:['UK','US','AU','NZ'], supplier:'Metalor Technologies', code:'425', density:'12.60 g/cm³', meltRange:'915–965 °C', flaskTemp:'not stated', castingTemp:'not stated', cooling:'not stated', hardness:'80 HV5 annealed', atmosphere:'Confirm route from current sheet', sourceFile:'datasheets/9W - 425-1.pdf', unknownBalance:'4.80%', proxyGuess:'Likely Cu / proprietary white balance; not verified', composition:[['Au',37.6],['Ag',57.6],['X',4.8]], note:'Sheet states Au 37.60% and Ag 57.60%. The remaining 4.80% is not itemised.' },
+      { id:'sup-metalor-9y-10036', family:'gold', group:'Supplier sheets · Metalor', title:'Metalor 9Y · 10036', subtitle:'9K Yellow · standard yellow', carat:'9K', fineness:'375', purity:37.6, colour:'Yellow', swatch:'linear-gradient(110deg,#bd8431 0%,#dcae50 48%,#8b5c20 100%)', markets:['UK','US','AU','NZ'], supplier:'Metalor Technologies', code:'10036', density:'11.15 g/cm³', meltRange:'850–910 °C', flaskTemp:'≈ 600 °C', castingTemp:'950–1010 °C', cooling:'Air cooling', hardness:'130 HV5', atmosphere:'Suitable for casting in air', sourceFile:'datasheets/9Y - 10036-1.pdf', unknownBalance:'52.10%', proxyGuess:'Likely Cu-rich / proprietary yellow balance; not verified', composition:[['Au',37.6],['Ag',10.3],['X',52.1]], note:'Sheet states Au 37.60% and Ag 10.30%. The remaining 52.10% is not itemised.' },
+      { id:'sup-metalor-ptco-10242', family:'platinum', group:'Supplier sheets · Metalor', title:'Metalor PtCo · 10242', subtitle:'Pt950 · 5% cobalt · casting pieces', fineness:'950', purity:95, colour:'White', swatch:'linear-gradient(110deg,#8b9aa2 0%,#f0f2ed 50%,#687983 100%)', markets:['UK','US','AU','NZ'], supplier:'Metalor Technologies', code:'10242', density:'20.80 g/cm³', meltRange:'1750–1765 °C', flaskTemp:'≈ 1000 °C', castingTemp:'1950–2150 °C', cooling:'Air cooling', hardness:'135 HV5 annealed / 190 HV5 post-cast', atmosphere:'Pt-capable machine / controlled atmosphere', sourceFile:'datasheets/PtCo - 10242-1.pdf', composition:[['Pt',95],['Co',5]], note:'Sheet states Pt 95.00% and Co 5.00%. Suitable for casting according to the supplied sheet; use the Pt-capable Fusus route and approved ceramic crucible.' },
+
+      { id:'sup-allgemeine-375s3', family:'gold', group:'Supplier sheets · Allgemeine', title:'Allgemeine 375 S3 · White', subtitle:'9K White · Ag/Pd · Cu/Zn split withheld', carat:'9K', fineness:'375', purity:37.5, colour:'White', swatch:'linear-gradient(110deg,#8f9ba1 0%,#e5e8e5 50%,#697880 100%)', markets:['UK','US','AU','NZ'], supplier:'Allgemeine', code:'375 S3', density:'12.3 g/cm³', meltRange:'850–915 °C', flaskTemp:'not stated', castingTemp:'not stated', cooling:'not stated', hardness:'105 HV cast / annealed', atmosphere:'H₂/N₂ mixture shown for annealing', sourceFile:'datasheets/375 S3 Eng-1.pdf', unknownBalance:'6.00%', proxyGuess:'Cu and Zn are both marked x; do not collapse the split into one metal', composition:[['Au',37.5],['Ag',55],['Pd',1.5],['X',6]], note:'Sheet states Au 375‰, Ag 550‰ and Pd 15‰; Cu and Zn are both marked x. X represents the combined 60‰ undisclosed balance.' },
+      { id:'sup-allgemeine-375-27', family:'gold', group:'Supplier sheets · Allgemeine', title:'Allgemeine 375/27 · Red', subtitle:'9K Red · Cu/Zn split withheld', carat:'9K', fineness:'375', purity:37.5, colour:'Red', swatch:'linear-gradient(110deg,#a55d43 0%,#d99370 48%,#7c4433 100%)', markets:['UK','US','AU','NZ'], supplier:'Allgemeine', code:'375/27', density:'11.0 g/cm³', meltRange:'960–990 °C', flaskTemp:'not stated', castingTemp:'not stated', cooling:'not stated', hardness:'100 HV annealed', atmosphere:'H₂/N₂ mixture shown for annealing', sourceFile:'datasheets/375-27 Eng-1.pdf', unknownBalance:'59.80%', proxyGuess:'Cu and Zn are both marked x; the split is unknown', composition:[['Au',37.5],['Ag',2.7],['X',59.8]], note:'Sheet states Au 375‰ and Ag 27‰; Cu and Zn are both marked x. X represents the combined 598‰ balance.' },
+      { id:'sup-allgemeine-585-40', family:'gold', group:'Supplier sheets · Allgemeine', title:'Allgemeine 585/40 · Red', subtitle:'14K Red · disclosed Au/Ag/Cu', carat:'14K', fineness:'585', purity:58.5, colour:'Red', swatch:'linear-gradient(110deg,#ae654d 0%,#e0a181 48%,#874937 100%)', markets:['UK','US','AU','NZ'], supplier:'Allgemeine', code:'585/40', density:'13.1 g/cm³', meltRange:'900–920 °C', flaskTemp:'not stated', castingTemp:'not stated', cooling:'not stated', hardness:'130 HV cast / annealed', atmosphere:'H₂/N₂ mixture shown for annealing', sourceFile:'datasheets/585-40 Eng-1.pdf', composition:[['Au',58.5],['Ag',4],['Cu',37.5]], note:'Sheet gives the full composition: Au 585‰, Ag 40‰ and Cu 375‰.' },
+      { id:'sup-allgemeine-750-40', family:'gold', group:'Supplier sheets · Allgemeine', title:'Allgemeine 750/40 · 5N Red', subtitle:'18K Red · disclosed Au/Ag/Cu', carat:'18K', fineness:'750', purity:75, colour:'Red 5N', swatch:'linear-gradient(110deg,#b66e56 0%,#e3aa8d 48%,#92513f 100%)', markets:['UK','US','AU','NZ'], supplier:'Allgemeine', code:'750/40', density:'15.0 g/cm³', meltRange:'880–900 °C', flaskTemp:'600–640 °C', castingTemp:'1010–1040 °C', cooling:'Quench in water after 5 min per sheet', hardness:'160 HV annealed', atmosphere:'H₂/N₂ mixture shown for annealing', sourceFile:'datasheets/750-40 Eng-1.pdf', composition:[['Au',75],['Ag',4],['Cu',21]], note:'Sheet gives the full composition: Au 750‰, Ag 40‰ and Cu 210‰. It includes investment-casting data; follow the current supplier sheet.' },
+      { id:'sup-metalor-stag-10026', family:'silver', group:'Supplier sheets · Metalor', title:'Metalor STAG · 10026', subtitle:'925 Silver · sterling family', fineness:'925', purity:92.5, colour:'White', swatch:'linear-gradient(110deg,#aeb7b7 0%,#f0f1ed 50%,#7c898b 100%)', markets:['UK','US','AU','NZ'], supplier:'Metalor Technologies', code:'10026', density:'10.40 g/cm³', meltRange:'800–900 °C', flaskTemp:'≈ 600 °C', castingTemp:'1000–1100 °C', cooling:'Air cooling', hardness:'75–85 HV5', atmosphere:'Standard sheet; confirm route', sourceFile:'datasheets/STAG - 10026-1.pdf', unknownBalance:'7.50%', proxyGuess:'Copper is common in sterling, but the sheet does not state the balance', composition:[['Ag',92.5],['X',7.5]], note:'Sheet states Ag 92.50%. The remaining 7.50% is not itemised; X is kept rather than assuming Cu.' }
+    ];
+    RECIPES.push(...SUPPLIER_RECIPES);
+
     const state = {
       family: 'gold',
       region: 'UK',
@@ -970,6 +1203,9 @@
     const componentColor = el => (ELEMENTS[el] || {}).color || '#a9aaa6';
     const escapeHtml = value => String(value ?? '').replace(/[&<>\"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;',"'":'&#39;'}[char]));
     const currentLabel = () => state.recipe?.label || state.recipe?.title || 'Custom recipe';
+    const preciousElement = family => family === 'gold' ? 'Au' : family === 'platinum' ? 'Pt' : 'Ag';
+    const familyName = family => family === 'gold' ? 'Gold' : family === 'platinum' ? 'Platinum' : 'Silver';
+    const familyAccent = family => family === 'gold' ? '#d2a654' : family === 'platinum' ? '#d7dde1' : '#aeb9c1';
     const calculatedFinenessLabel = value => value >= 999.5 ? '999+' : String(Math.round(value));
     function reportedFineness(value) {
       return !state.edited && state.recipe?.fineness ? state.recipe.fineness : calculatedFinenessLabel(value);
@@ -996,6 +1232,7 @@
         if (pct('Ru') >= 4) return 'Cool bright white';
         return 'Cool platinum white';
       }
+      if (state.family === 'silver') return 'White silver';
       const ag = pct('Ag');
       const cu = pct('Cu');
       const pd = pct('Pd');
@@ -1096,16 +1333,31 @@
     }
     function buildChargeModel(composition, totalPct, targetGrams, allowance) {
       const settings = getGuardSettings(composition);
-      const targetFractions = guardedFractions(composition, totalPct, state.family === 'gold' ? 'Au' : 'Pt', settings.assayGuard);
+      const targetFractions = guardedFractions(composition, totalPct, preciousElement(state.family), settings.assayGuard);
       const allowanceFactor = 1 + Math.max(0, allowance) / 100;
       const rawMasses = targetFractions.map((fraction, index) => targetGrams * fraction / settings.retention[index] * allowanceFactor);
       const retainedMasses = rawMasses.map((mass, index) => mass * settings.retention[index]);
       const rawTotal = rawMasses.reduce((sum, mass) => sum + mass, 0);
       const retainedTotal = retainedMasses.reduce((sum, mass) => sum + mass, 0);
-      const preciousEl = state.family === 'gold' ? 'Au' : 'Pt';
+      const preciousEl = preciousElement(state.family);
       const finalPreciousMass = retainedMasses.reduce((sum, mass, index) => sum + (composition[index].el === preciousEl ? mass : 0), 0);
       const finalPreciousFraction = retainedTotal > 0 ? finalPreciousMass / retainedTotal : 0;
       return { settings, targetFractions, rawMasses, retainedMasses, rawTotal, retainedTotal, lossGrams: Math.max(0, rawTotal - retainedTotal), finalPreciousMass, finalPreciousFraction, finalFineness: finalPreciousFraction * 1000, finalCarat: finalPreciousFraction * 24 };
+    }
+
+    const STYLE_NAMES = { bench:'Bench', atelier:'Atelier', ledger:'Ledger', foundry:'Foundry', signal:'Signal' };
+    function applyTheme(theme, persist=true) {
+      if (!STYLE_NAMES[theme]) theme = 'bench';
+      document.body.dataset.theme = theme;
+      if ($('#styleName')) $('#styleName').textContent = STYLE_NAMES[theme];
+      $$('.style-option').forEach(option => {
+        const active = option.dataset.theme === theme;
+        option.classList.toggle('active', active);
+        const check = option.querySelector('.style-option-check');
+        if (check) check.textContent = active ? '✓' : '';
+      });
+      if ($('#styleButton')) $('#styleButton').setAttribute('aria-expanded', String($('#stylePopover')?.classList.contains('open') || false));
+      if (persist) { try { localStorage.setItem('castform-theme', theme); } catch (error) {} }
     }
 
     function toast(message) {
@@ -1132,7 +1384,7 @@
     }
 
     function renderTopContext() {
-      const familyLabel = state.family === 'gold' ? 'Gold' : 'Platinum';
+      const familyLabel = familyName(state.family);
       $('#topContext').textContent = familyLabel + ' · ' + state.region + ' · ' + UNIT_LONG[state.unit];
     }
 
@@ -1151,7 +1403,7 @@
       const filtered = RECIPES.filter(recipe => {
         if (recipe.family !== state.family) return false;
         // Platinum alloys are shown in every market lens; gold is filtered by the selected market.
-        return state.family === 'platinum' || recipe.markets.includes(state.region);
+        return state.family !== 'gold' || recipe.markets.includes(state.region);
       });
       const groups = [];
       filtered.forEach(recipe => {
@@ -1167,11 +1419,11 @@
               <button class="recipe-card ${state.recipe?.id === recipe.id ? 'active' : ''}" data-recipe-id="${recipe.id}">
                 <div class="card-line"><div><strong>${recipe.title}</strong><small>${recipe.subtitle}</small></div><span class="selected-check">selected</span></div>
                 <div class="mini-bar">${miniBar(recipe)}</div>
-                <div class="tag-line"><span class="tag ${recipe.family === 'platinum' ? 'cool' : 'accent'}">${recipe.family === 'gold' ? recipe.carat + ' · ' + recipe.fineness : 'Pt' + recipe.fineness}</span><span class="tag">${recipe.colour}</span></div>
+                <div class="tag-line"><span class="tag ${recipe.family === 'platinum' || recipe.family === 'silver' ? 'cool' : 'accent'}">${recipe.family === 'gold' ? recipe.carat + ' · ' + recipe.fineness : recipe.family === 'platinum' ? 'Pt' + recipe.fineness : 'Ag' + recipe.fineness}</span><span class="tag">${recipe.colour}</span></div>
               </button>`).join('')}
           </div>
         </div>`).join('');
-      const customHtml = `<div class="recipe-group"><div class="recipe-group-title">Your formula</div><div class="recipe-stack"><button class="recipe-card custom-card" id="customRecipeButton"><div class="card-line"><div><strong>Build a custom recipe</strong><small>Start with a blank, editable charge</small></div><span style="color:var(--gold-dark);font-family:var(--mono);font-size:15px">＋</span></div><div class="mini-bar"><span style="width:50%;background:${state.family === 'gold' ? '#d2a654' : '#d7dde1'}"></span><span style="width:25%;background:#aeb9c1"></span><span style="width:25%;background:${state.family === 'gold' ? '#c87959' : '#718ba0'}"></span></div><div class="tag-line"><span class="tag">editable</span><span class="tag">house alloy</span></div></button></div></div>`;
+      const customHtml = `<div class="recipe-group"><div class="recipe-group-title">Your formula</div><div class="recipe-stack"><button class="recipe-card custom-card" id="customRecipeButton"><div class="card-line"><div><strong>Build a custom recipe</strong><small>Start with a blank, editable charge</small></div><span style="color:var(--gold-dark);font-family:var(--mono);font-size:15px">＋</span></div><div class="mini-bar"><span style="width:50%;background:${state.family === 'gold' ? '#d2a654' : state.family === 'platinum' ? '#d7dde1' : '#aeb9c1'}"></span><span style="width:25%;background:#aeb9c1"></span><span style="width:25%;background:${state.family === 'gold' ? '#c87959' : state.family === 'platinum' ? '#718ba0' : '#8f9a9a'}"></span></div><div class="tag-line"><span class="tag">editable</span><span class="tag">house alloy</span></div></button></div></div>`;
       $('#recipeGroups').innerHTML = groupHtml + customHtml;
       $$('.recipe-card[data-recipe-id]').forEach(card => card.addEventListener('click', () => selectRecipe(card.dataset.recipeId)));
       $('#customRecipeButton').addEventListener('click', createCustomRecipe);
@@ -1183,8 +1435,10 @@
       resetRetention();
       state.recipe = state.family === 'gold' ? {
         id: 'custom-gold', family: 'gold', group: 'Your formula', title: 'Custom Gold Recipe', label: 'Custom Gold Recipe', subtitle: 'editable house formula', carat: '', fineness: '', purity: 0, colour: 'Set your expected colour', swatch: 'linear-gradient(110deg,#9b8b68 0%,#d8d2c1 50%,#696054 100%)', composition: [{el:'Au',pct:75},{el:'Ag',pct:12.5},{el:'Cu',pct:12.5}], note:'Custom formula — validate with your alloy supplier and assay.'
-      } : {
+      } : state.family === 'platinum' ? {
         id: 'custom-platinum', family: 'platinum', group: 'Your formula', title: 'Custom Platinum Recipe', label: 'Custom Platinum Recipe', subtitle: 'editable house formula', fineness: '', purity: 0, colour: 'Set your expected colour', swatch: 'linear-gradient(110deg,#8a989d 0%,#e4e8e5 50%,#626d72 100%)', composition: [{el:'Pt',pct:95},{el:'Co',pct:5}], note:'Custom formula — validate crucible, atmosphere and casting parameters with your supplier.'
+      } : {
+        id: 'custom-silver', family: 'silver', group: 'Your formula', title: 'Custom Silver Recipe', label: 'Custom Silver Recipe', subtitle: 'editable house formula', fineness: '', purity: 0, colour: 'White silver', swatch: 'linear-gradient(110deg,#aeb7b7 0%,#f0f1ed 50%,#7c898b 100%)', composition: [{el:'Ag',pct:92.5},{el:'Cu',pct:7.5}], note:'Custom formula — validate with your alloy supplier and assay.'
       };
       state.recipeId = state.recipe.id;
       state.edited = true;
@@ -1229,13 +1483,34 @@
       updateResults();
     }
 
+    function renderSupplierMeta() {
+      const container = $('#supplierMeta');
+      if (!container || !state.recipe?.supplier) {
+        if (container) { container.classList.remove('visible'); container.innerHTML = ''; }
+        return;
+      }
+      const recipe = state.recipe;
+      const source = recipe.sourceFile ? encodeURI(recipe.sourceFile) : '';
+      const specs = [
+        ['Density', recipe.density],
+        ['Melt range', recipe.meltRange],
+        ['Flask', recipe.flaskTemp],
+        ['Casting', recipe.castingTemp],
+        ['Cooling', recipe.cooling],
+        ['Hardness', recipe.hardness]
+      ].filter(item => item[1]);
+      container.innerHTML = `<div class="supplier-meta-head"><div><span>Supplier data sheet</span><strong>${escapeHtml(recipe.supplier)} · code ${escapeHtml(recipe.code || '—')}</strong></div>${source ? `<a href="${source}" target="_blank" rel="noopener">Open sheet ↗</a>` : ''}</div><div class="supplier-specs">${specs.map(item => `<div class="supplier-spec"><b>${escapeHtml(item[0])}</b><span title="${escapeHtml(item[1])}">${escapeHtml(item[1])}</span></div>`).join('')}</div>${recipe.unknownBalance ? `<div class="supplier-unknown"><b>X balance ${escapeHtml(recipe.unknownBalance)}:</b> supplier sheet does not itemise it. ${escapeHtml(recipe.proxyGuess || 'Keep it as X until your supplier or assay work identifies it.')}</div>` : ''}`;
+      container.classList.add('visible');
+    }
+
     function renderResults() {
       if (!state.recipe) return;
       $('#selectedRecipeTitle').textContent = state.recipe.title;
-      $('#selectedRecipeSubtitle').textContent = state.recipe.subtitle || (state.family === 'gold' ? 'editable gold composition' : 'editable platinum composition');
-      $('#selectedColorDot').style.background = state.recipe.family === 'gold' ? '#d2a654' : '#d7dde1';
+      $('#selectedRecipeSubtitle').textContent = state.recipe.subtitle || (state.family === 'gold' ? 'editable gold composition' : state.family === 'platinum' ? 'editable platinum composition' : 'editable silver composition');
+      $('#selectedColorDot').style.background = familyAccent(state.recipe.family);
       $('#recipeLabelInput').value = currentLabel();
       $('#recipeNote').textContent = state.recipe.note || 'Custom formula — validate with your alloy supplier and assay.';
+      renderSupplierMeta();
       updateResults();
     }
 
@@ -1248,7 +1523,7 @@
       state.batchValue = num($('#batchInput')?.value || 0);
       state.allowance = allowance;
       const validTotal = totalPct > 0;
-      const preciousEl = state.family === 'gold' ? 'Au' : 'Pt';
+      const preciousEl = preciousElement(state.family);
       const preciousPct = composition.filter(row => row.el === preciousEl).reduce((sum, row) => sum + Math.max(0, num(row.pct)), 0);
       const preciousFraction = validTotal ? preciousPct / totalPct : 0;
       const model = buildChargeModel(composition, totalPct, targetGrams, allowance);
@@ -1262,8 +1537,8 @@
       const unit = UNIT_LABELS[state.unit];
 
       $('#selectedRecipeTitle').textContent = state.recipe.title;
-      $('#selectedRecipeSubtitle').textContent = state.recipe.subtitle || (state.family === 'gold' ? 'editable gold composition' : 'editable platinum composition');
-      $('#selectedColorDot').style.background = state.recipe.family === 'gold' ? '#d2a654' : '#d7dde1';
+      $('#selectedRecipeSubtitle').textContent = state.recipe.subtitle || (state.family === 'gold' ? 'editable gold composition' : state.family === 'platinum' ? 'editable platinum composition' : 'editable silver composition');
+      $('#selectedColorDot').style.background = familyAccent(state.recipe.family);
       const useLiveColour = state.isCustom || state.edited || state.recipe.colour === 'Set your expected colour';
       const liveColour = useLiveColour ? inferredColour() : (state.recipe.colour || inferredColour());
       if (useLiveColour) state.recipe.colour = liveColour;
@@ -1290,9 +1565,12 @@
         const caratText = validTotal ? (modelActive ? (displayFineness >= 999.5 ? '24K' : fmt(displayFineness / 1000 * 24, 2).replace(/\.00$/, '') + 'K') : reportedCarat(displayFineness)) : '—';
         const fineText = validTotal ? (modelActive ? calculatedFinenessLabel(displayFineness) + ' predicted' : reportedFineness(displayFineness) + ' fineness') : 'check recipe';
         $('#resultPurity').innerHTML = `${caratText}<small>${fineText}</small>`;
-      } else {
+      } else if (state.family === 'platinum') {
         const fineText = validTotal ? (modelActive ? calculatedFinenessLabel(displayFineness) + ' predicted' : reportedFineness(displayFineness)) : '—';
         $('#resultPurity').innerHTML = `Pt${fineText}<small>${validTotal ? (modelActive ? fineText : fineText + ' fineness') : 'check recipe'}</small>`;
+      } else {
+        const fineText = validTotal ? (modelActive ? calculatedFinenessLabel(displayFineness) + ' predicted' : reportedFineness(displayFineness)) : '—';
+        $('#resultPurity').innerHTML = `Ag${fineText}<small>${validTotal ? (modelActive ? fineText : fineText + ' fineness') : 'check recipe'}</small>`;
       }
 
       const guardParts = [];
@@ -1301,7 +1579,7 @@
       $('#guardSummary').textContent = guardParts.length ? guardParts.join(' · ') : 'nominal only';
       const targetEl = $('#guardTarget');
       if (validTotal) {
-        targetEl.querySelector('b').textContent = state.family === 'gold' ? `Au ${fmt(model.finalPreciousFraction * 100, 3)}% · ${calculatedFinenessLabel(model.finalFineness)}` : `Pt ${fmt(model.finalPreciousFraction * 100, 3)}% · Pt${calculatedFinenessLabel(model.finalFineness)}`;
+        targetEl.querySelector('b').textContent = state.family === 'gold' ? `Au ${fmt(model.finalPreciousFraction * 100, 3)}% · ${calculatedFinenessLabel(model.finalFineness)}` : state.family === 'platinum' ? `Pt ${fmt(model.finalPreciousFraction * 100, 3)}% · Pt${calculatedFinenessLabel(model.finalFineness)}` : `Ag ${fmt(model.finalPreciousFraction * 100, 3)}% · Ag${calculatedFinenessLabel(model.finalFineness)}`;
         targetEl.querySelector('small').textContent = modelActive ? `${displayMass(model.rawTotal)} raw → ${displayMass(model.retainedTotal)} expected retained.` : 'Retention defaults to 100.00% until you change an element.';
       } else {
         targetEl.querySelector('b').textContent = 'Add a precious-metal row';
@@ -1352,6 +1630,7 @@
       if (modelActive) alerts.push(`Correction model active: assumed retention is being used to propose a guarded final ${preciousEl} target. Assay the result; the model cannot guarantee it.`);
       if (modelActive && model.settings.assayGuard <= 0.0001) alerts.push(`No positive assay guard is set: the model is targeting the recipe fineness, not a value above it.`);
       if (Math.abs(totalPct - 100) >= .01 && validTotal) alerts.push(`Recipe totals ${fmtPct(totalPct)}; the charge sheet normalises the rows to 100%.`);
+      if (composition.some(row => row.el === 'X')) alerts.push('X / withheld balance present: this is a bookkeeping placeholder, not a verified element. Replace it only from supplier information or assay work.');
       if (composition.some(row => row.el === 'Ni')) alerts.push('Nickel-containing white gold: check allergy, product and local compliance requirements.');
       if (composition.some(row => ['Zn','Al'].includes(row.el))) alerts.push('Volatile / reactive addition present: use the supplier TDS, local exhaust and a controlled melt path.');
       if (state.family === 'platinum') alerts.push('Pt route: use a platinum-rated crucible and heat source. Do not use a standard gold-only G1 programme.');
@@ -1366,17 +1645,21 @@
       const recipe = state.recipe;
       if (!recipe) return;
       const pt = state.family === 'platinum';
+      const silver = state.family === 'silver';
       const method = state.method;
       $$('.process-tab').forEach(tab => tab.classList.toggle('active', tab.dataset.method === method));
-      $('#processIntro').textContent = pt ? 'Platinum needs a Pt-rated route, dedicated crucible and controlled atmosphere.' : 'A short, practical route for a repeatable gold charge.';
-      const content = processContent(method, recipe, pt);
+      $('#processIntro').textContent = pt ? 'Platinum needs a Pt-rated route, dedicated crucible and controlled atmosphere.' : silver ? 'Silver recipes are softer on temperature but still benefit from clean charge and controlled oxidation.' : 'A short, practical route for a repeatable gold charge.';
+      const content = processContent(method, recipe, pt, silver);
       $('#methodLayout').innerHTML = content;
     }
 
-    function processContent(method, recipe, pt) {
+    function processContent(method, recipe, pt, silver) {
       if (method === 'machine') {
         if (pt) {
           return `<div class="method-copy"><span class="method-kicker">Preferred for ${recipe.title}</span><h3>Fusus-style centrifuge. Ceramic crucible.</h3><p>Charge clean, known platinum and alloying metal into a crucible specifically approved for platinum. On a Pt-capable Galloni Fusus-class cycle, you can cast the alloy into small sound buttons / ingots for later charges or cast the production tree; use the alloy supplier’s optical-pyrometer programme and cast promptly once homogeneous.</p><ol class="steps"><li><strong>Crucible</strong><span>Use quartz, ceramic or another crucible specified for Pt. Keep it dedicated.</span></li><li><strong>Atmosphere</strong><span>Evacuate / backfill as the machine manual requires. Keep oxygen and contamination under control.</span></li><li><strong>Cast</strong><span>Use the Pt investment, tree, flask and pressure settings as a matched system; for buttons, use a clean, dry small ingot mould.</span></li></ol></div><div class="method-side"><div class="side-heading"><i>Pt</i> Machine fit</div><ul><li><b>${recipe.title}</b> is not a gold-G1 recipe.</li><li>A G1 listing describes a type-S gold temperature system up to about 1,450 °C; Pt needs a separate Pt-capable setup such as the appropriate Fusus / platinum kit.</li><li>Pt950Co generally fills more readily than Pt950Ru in published comparisons, but geometry and parameters still decide the result.</li></ul><div class="method-callout"><b>Production route:</b> make small buttons / ingots from clean, traceable charge, record the lot, then use them as prepared feedstock for the next Pt cast.</div></div>`;
+        }
+        if (silver) {
+          return `<div class="method-copy"><span class="method-kicker">Preferred for ${recipe.title}</span><h3>Clean charge. Controlled pour.</h3><p>For silver, use the approved crucible and programme for the alloy. Keep the charge clean and dry, control oxidation and use the supplier’s casting range rather than a pure-silver temperature assumption.</p><ol class="steps"><li><strong>Charge</strong><span>Weigh the rows, remove dirt and keep the crucible within its safe capacity.</span></li><li><strong>Melt</strong><span>Use the machine’s silver programme and avoid unnecessary holding or superheat.</span></li><li><strong>Verify</strong><span>Keep X / undisclosed supplier balance clearly labelled and assay the prepared stock if needed.</span></li></ol></div><div class="method-side"><div class="side-heading"><i>Ag</i> Silver checklist</div><ul><li>Use a crucible dedicated to silver or an approved compatible alloy.</li><li>Do not assume the undisclosed X balance is copper unless the supplier confirms it.</li><li>Keep oxidation, dross and contamination under control.</li><li>Use the current supplier sheet for flask, cooling and casting settings.</li></ul><div class="method-callout"><b>Good default:</b> for repeatable silver production, use named sterling grain and retain the supplier’s batch / lot record.</div></div>`;
         }
         return `<div class="method-copy"><span class="method-kicker">Preferred for ${recipe.title}</span><h3>Let the machine do the mixing.</h3><p>For a Galloni G1 gold cycle, charge clean and dry material into the approved gold crucible, use the stored programme or supplier setting, and let the induction system homogenise the melt before the automatic pour.</p><ol class="steps"><li><strong>Charge</strong><span>Weigh the rows, remove dirt and keep the crucible within its safe capacity.</span></li><li><strong>Melt</strong><span>Use the G1 gold programme. Keep zinc-bearing additions controlled and avoid loose powder.</span></li><li><strong>Verify</strong><span>Use the machine’s mix / hold sequence, then cast without unnecessary superheat.</span></li></ol></div><div class="method-side"><div class="side-heading"><i>Au</i> G1 checklist</div><ul><li>Confirm the exact G1 model, crucible type and capacity in your manual.</li><li>Gold, silver and copper go in as clean, known feedstock; introduce volatile master alloy late where the supplier directs.</li><li>Do not use the pure-metal melting points as a setpoint.</li><li>Keep the machine cycle, gas, vacuum and cooling services within Galloni’s instructions.</li></ul><div class="method-callout"><b>Good default:</b> for production gold, use a named commercial grain / master alloy with its TDS and use this calculator to scale the charge.</div></div>`;
       }
@@ -1384,7 +1667,13 @@
         if (pt) {
           return `<div class="method-copy"><span class="method-kicker">Make the alloy before casting</span><h3>Pre-alloy under controlled heat.</h3><p>Outside the casting cycle is the repeatable route when you need a known Pt button or ingot. Use Pt-compatible equipment and atmosphere; open-air bench alloying is not a production substitute for certified grain.</p><ol class="steps"><li><strong>Separate</strong><span>Weigh Pt and the alloying metal from clean, traceable stock.</span></li><li><strong>Homogenise</strong><span>Use induction / arc / furnace equipment rated for Pt and make a button or ingot.</span></li><li><strong>Prepare</strong><span>Cool safely, inspect, granulate and record the lot before the casting charge.</span></li></ol></div><div class="method-side"><div class="side-heading"><i>01</i> Outside the flask</div><ul><li>Use a dedicated Pt-compatible crucible or hearth and a controlled atmosphere.</li><li>Do not add carbon contamination from graphite unless the equipment supplier specifically approves it.</li><li>Assay or validate the batch if the formula is going into saleable stock.</li></ul><div class="method-callout"><b>Best practice:</b> for a small studio, certified commercial Pt grain is usually more predictable than making PtRu / PtIr from elemental pieces.</div></div>`;
         }
+        if (silver) {
+          return `<div class="method-copy"><span class="method-kicker">Make the alloy before casting</span><h3>Prepare a clean silver button.</h3><p>Outside the casting cycle, a small homogeneous button or ingot makes a useful known charge. Keep the supplier’s X balance labelled and avoid treating it as a verified copper content.</p><ol class="steps"><li><strong>Weigh</strong><span>Use clean, calibrated scales and keep alloy lots separate.</span></li><li><strong>Combine</strong><span>Use a dedicated silver crucible and the supplier-approved protection.</span></li><li><strong>Prepare</strong><span>Cast, cool, inspect and record the button before the production charge.</span></li></ol></div><div class="method-side"><div class="side-heading"><i>01</i> Outside the flask</div><ul><li>Keep silver tooling separate from gold and platinum tooling where practical.</li><li>Record recovered metal, dross and any visible oxidation.</li><li>Do not assume a beautiful white surface proves the stated fineness.</li></ul><div class="method-callout"><b>Use the X placeholder:</b> replace it only when the supplier or your assay work identifies the balance.</div></div>`;
+        }
         return `<div class="method-copy"><span class="method-kicker">Make the alloy before casting</span><h3>Pre-alloy, then charge.</h3><p>For a house gold alloy or a larger batch, make a homogeneous button / ingot first. It gives the composition a chance to even out before the casting cycle and makes the charge easier to inspect and recover.</p><ol class="steps"><li><strong>Weigh</strong><span>Use the calculated rows on clean, calibrated scales; keep each carat stream separate.</span></li><li><strong>Combine</strong><span>Melt the less-volatile metals first. Add zinc-bearing master alloy late and under the supplier’s protection.</span></li><li><strong>Prepare</strong><span>Cast a button / ingot, cool, then shot or granulate it before recharging.</span></li></ol></div><div class="method-side"><div class="side-heading"><i>01</i> Outside the flask</div><ul><li>Use a clean dedicated crucible, ingot mould and tools.</li><li>Keep an accurate record of input mass, recovered beads and any slag / loss.</li><li>Do not assume a beautiful colour proves a correct fineness.</li></ul><div class="method-callout"><b>Why bother:</b> pre-alloying is especially useful when you are combining fine gold with a master alloy and need repeatable lots.</div></div>`;
+      }
+      if (silver) {
+        return `<div class="method-copy"><span class="method-kicker">Small batch · trained operator</span><h3>Keep silver clean and moving.</h3><p>A torch can be used for small silver work by a trained operator, but the calculator cannot identify the undisclosed X balance. Use the supplier’s route, local exhaust and a dedicated crucible.</p><ol class="steps"><li><strong>Prepare</strong><span>Use dry tools, eye / face protection, local exhaust and a suitable crucible.</span></li><li><strong>Melt</strong><span>Keep the flame moving and avoid unnecessary holding, oxidation and contamination.</span></li><li><strong>Verify</strong><span>Cast a test button when changing material lots and keep X clearly recorded.</span></li></ol></div><div class="method-side"><div class="side-heading"><i>!</i> Silver limits</div><ul><li>Small batches only unless your furnace procedure is validated.</li><li>Do not treat X as an analytical result or an assumed copper percentage.</li><li>Do not pour near damp tools, moulds or surfaces.</li></ul><div class="method-callout"><b>Choose certified grain</b> when the exact composition and repeatability matter.</div></div>`;
       }
       if (pt) {
         return `<div class="method-copy"><span class="method-kicker">Torch / trained bench only</span><h3>Do not improvise with platinum.</h3><p>A torch can be a valid specialist route for small Pt fabrication or repair, but it is not the default recommendation for new production castings. The torch, fuel, crucible, eye protection, ventilation and operator training must be purpose-built.</p><ol class="steps"><li><strong>Setup</strong><span>Use a Pt-compatible crucible and a properly installed, flashback-protected torch system.</span></li><li><strong>Flame</strong><span>Use the fuel combination specified for Pt; avoid carbon-rich contamination and never use graphite by assumption.</span></li><li><strong>Timing</strong><span>Keep the melt short and cast only when the trained operator and machine are ready.</span></li></ol></div><div class="method-side"><div class="side-heading"><i>!</i> Torch limits</div><ul><li>PtRu is generally not a casual torch alloy; use induction / controlled atmosphere.</li><li>Bright molten Pt emits intense visible / UV / infrared radiation; use rated eye and face protection.</li><li>Keep all moisture, combustible materials and bystanders away from the hot zone.</li></ul><div class="method-callout"><b>Hard stop:</b> if you do not already have a documented Pt torch procedure, use a Pt-capable casting machine or certified grain instead.</div></div>`;
@@ -1401,7 +1690,7 @@
       const lines = [
         'CAST/FORM CHARGE SHEET',
         currentLabel(),
-        state.family === 'gold' ? `Expected: Au ${fmt(finalPreciousPct,3)}% · ${calc.modelActive ? calculatedFinenessLabel(finalFineness) : reportedFineness(finalFineness)} fineness · ${state.recipe.colour}` : `Expected: Pt ${fmt(finalPreciousPct,3)}% · Pt${calc.modelActive ? calculatedFinenessLabel(finalFineness) : reportedFineness(finalFineness)} · ${state.recipe.colour}`,
+        state.family === 'gold' ? `Expected: Au ${fmt(finalPreciousPct,3)}% · ${calc.modelActive ? calculatedFinenessLabel(finalFineness) : reportedFineness(finalFineness)} fineness · ${state.recipe.colour}` : state.family === 'platinum' ? `Expected: Pt ${fmt(finalPreciousPct,3)}% · Pt${calc.modelActive ? calculatedFinenessLabel(finalFineness) : reportedFineness(finalFineness)} · ${state.recipe.colour}` : `Expected: Ag ${fmt(finalPreciousPct,3)}% · Ag${calc.modelActive ? calculatedFinenessLabel(finalFineness) : reportedFineness(finalFineness)} · ${state.recipe.colour}`, 
         `Target final batch: ${displayMass(calc.targetGrams)}`,
         `Raw charge: ${displayMass(calc.chargeGrams)}${state.allowance ? ` (${fmt(state.allowance,1)}% allowance)` : ''}`,
         calc.modelActive ? `Expected retained: ${displayMass(model.retainedTotal)} · modelled loss: ${displayMass(model.lossGrams)}` : 'Retention model: off',
@@ -1468,9 +1757,10 @@
       $('#savedContent').innerHTML = `<div class="saved-grid">${recipes.map(recipe => {
         const comp = componentPairs(recipe);
         const total = comp.reduce((s,row)=>s+num(row.pct),0)||100;
-        const precious = comp.filter(row=>row.el === (recipe.family === 'gold' ? 'Au' : 'Pt')).reduce((s,row)=>s+num(row.pct),0)/total*1000;
+        const precious = comp.filter(row=>row.el === preciousElement(recipe.family)).reduce((s,row)=>s+num(row.pct),0)/total*1000;
         const safeLabel = escapeHtml(recipe.label || recipe.title);
-        return `<article class="saved-card"><div class="saved-card-top"><div><h3>${safeLabel}</h3><div class="saved-meta">${recipe.family === 'gold' ? 'Gold' : 'Platinum'} · ${recipe.family === 'gold' ? Math.round(precious/1000*24*100)/100 + 'K' : 'Pt' + Math.round(precious)}</div></div><span class="tag ${recipe.family === 'gold' ? 'accent' : 'cool'}">${recipe.family === 'gold' ? 'Au' : 'Pt'}</span></div><div class="saved-bar">${miniBar(recipe)}</div><div class="saved-card-actions"><button data-load-saved="${recipe.id}">Load in calculator</button><button class="delete-saved" title="Delete" aria-label="Delete ${safeLabel}" data-delete-saved="${recipe.id}">×</button></div></article>`;
+        const savedFine = recipe.family === 'gold' ? Math.round(precious/1000*24*100)/100 + 'K' : preciousElement(recipe.family) + Math.round(precious);
+        return `<article class="saved-card"><div class="saved-card-top"><div><h3>${safeLabel}</h3><div class="saved-meta">${familyName(recipe.family)} · ${savedFine}</div></div><span class="tag ${recipe.family === 'gold' ? 'accent' : 'cool'}">${preciousElement(recipe.family)}</span></div><div class="saved-bar">${miniBar(recipe)}</div><div class="saved-card-actions"><button data-load-saved="${recipe.id}">Load in calculator</button><button class="delete-saved" title="Delete" aria-label="Delete ${safeLabel}" data-delete-saved="${recipe.id}">×</button></div></article>`;
       }).join('')}</div>`;
       $$('[data-load-saved]').forEach(btn => btn.addEventListener('click', () => loadSaved(btn.dataset.loadSaved)));
       $$('[data-delete-saved]').forEach(btn => btn.addEventListener('click', () => deleteSaved(btn.dataset.deleteSaved)));
@@ -1507,6 +1797,9 @@
     }
 
     function init() {
+      let savedTheme = 'bench';
+      try { savedTheme = localStorage.getItem('castform-theme') || 'bench'; } catch (error) {}
+      applyTheme(savedTheme, false);
       state.recipe = makeRecipe(recipeById('g-18-y'));
       state.recipeId = state.recipe.id;
       renderRegion(); renderRecipes(); renderComposition(); renderResults(); renderProcess(); renderTopContext();
@@ -1516,7 +1809,7 @@
         const family = btn.dataset.family;
         if (family === state.family) return;
         state.family = family;
-        const defaultId = family === 'gold' ? 'g-18-y' : 'pt-950-co';
+        const defaultId = family === 'gold' ? 'g-18-y' : family === 'platinum' ? 'pt-950-co' : 'sup-metalor-stag-10026';
         state.recipe = makeRecipe(recipeById(defaultId));
         state.recipeId = defaultId; state.isCustom = false; state.edited = false; state.colourSlider = null; resetRetention();
         $$('.family-pill').forEach(item => { const active = item.dataset.family === family; item.classList.toggle('active',active); item.setAttribute('aria-selected',active); });
@@ -1571,16 +1864,34 @@
         state.colourSlider = null;
         renderComposition();
       });
-      $('#addMetalButton').addEventListener('click', () => { state.recipe.composition.push({el: state.family === 'gold' ? 'Zn' : 'Ru', pct: 0}); state.edited = true; state.colourSlider = null; renderComposition(); toast('Metal row added.'); });
+      $('#addMetalButton').addEventListener('click', () => { state.recipe.composition.push({el: state.family === 'gold' ? 'Zn' : state.family === 'platinum' ? 'Ru' : 'Cu', pct: 0}); state.edited = true; state.colourSlider = null; renderComposition(); toast('Metal row added.'); });
       $('#colourSlider').addEventListener('input', event => applyColourBalance(event.target.value));
       $('#copyButton').addEventListener('click', copyChargeSheet);
       $('#saveButton').addEventListener('click', saveCurrentRecipe);
       $('#printButton').addEventListener('click', () => window.print());
+      $('#styleButton').addEventListener('click', event => {
+        event.stopPropagation();
+        const open = !$('#stylePopover').classList.contains('open');
+        $('#stylePopover').classList.toggle('open', open);
+        $('#styleButton').setAttribute('aria-expanded', String(open));
+      });
+      $$('.style-option').forEach(option => option.addEventListener('click', () => {
+        applyTheme(option.dataset.theme);
+        $('#stylePopover').classList.remove('open');
+        $('#styleButton').setAttribute('aria-expanded', 'false');
+        toast(STYLE_NAMES[option.dataset.theme] + ' style applied.');
+      }));
+      document.addEventListener('click', event => {
+        if (!event.target.closest('#stylePopover') && !event.target.closest('#styleButton')) {
+          $('#stylePopover').classList.remove('open');
+          $('#styleButton').setAttribute('aria-expanded', 'false');
+        }
+      });
       $('#menuButton').addEventListener('click', () => $('#sidebar').classList.toggle('open'));
       $('#backToCalc').addEventListener('click', event => { event.preventDefault(); showView('calculator'); });
     }
 
     init();
   </script>
-<script>(function(){function c(){var b=a.contentDocument||(a.contentWindow&&a.contentWindow.document);if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a2f3afb4da04ef25',t:'MTc4NzQyMDY3NQ=='};var a=document.createElement('script');a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</body>
 </html>

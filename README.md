@@ -25,6 +25,7 @@ A self-contained, browser-only alloying calculator for a jewellery casting works
   - torch / bench work
 - Safety notes for zinc, nickel, cadmium, beryllium, platinum temperature, moisture and crucible segregation
 - Data notes and source links
+- Five switchable visual skins in the Style menu: Bench, Atelier, Ledger, Foundry and Signal
 
 ## Run it locally
 
@@ -34,7 +35,7 @@ Open `index.html` directly in a browser, or serve the folder:
 python3 -m http.server 8000
 ```
 
-The app has no build step, external JavaScript, external fonts or external CSS. The logo is embedded into `index.html` as a data URI so the main file remains portable. The original uploaded logo is also retained at `assets/TJ-Hand-Crafted-Logo.webp`.
+The app has no build step, external JavaScript, external fonts or external CSS. The logo is embedded into `index.html` as a data URI so the main file remains portable. The original uploaded logo is also retained at `assets/TJ-Hand-Crafted-Logo.webp`. The supplied PDF data sheets are retained in `datasheets/`; upload that folder if you want the in-app “Open sheet” links to work on GitHub Pages.
 
 ## Publish with GitHub Pages
 
