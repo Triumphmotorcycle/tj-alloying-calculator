@@ -502,6 +502,39 @@
     .toast { position: fixed; z-index: 50; right: 24px; bottom: 24px; max-width: 330px; transform: translateY(20px); opacity: 0; pointer-events: none; padding: 11px 14px; border-radius: 10px; color: #fff; background: var(--ink); box-shadow: 0 8px 26px rgba(0,0,0,.2); font-size: 11px; transition: .25s ease; }
     .toast.show { transform: translateY(0); opacity: 1; }
 
+    .conversion-layout { display: grid; grid-template-columns: minmax(0,1.15fr) minmax(300px,.85fr); gap: 16px; }
+    .conversion-card, .conversion-explainer { padding: 22px; }
+    .conversion-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+    .conversion-card .field { min-width: 0; }
+    .conversion-select { width: 100%; min-height: 42px; border: 1px solid var(--line); border-radius: 10px; outline: 0; padding: 0 11px; color: var(--ink); background: #fff; font-family: var(--mono); font-size: 11px; }
+    .conversion-select:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(210,166,84,.13); }
+    .conversion-actions { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 2px 0 17px; }
+    .swap-button { border: 0; padding: 0; color: var(--gold-dark); background: transparent; font-size: 10px; font-weight: 800; }
+    .swap-button:hover { color: var(--ink); }
+    .conversion-result { padding: 20px; border-radius: 13px; color: #f8f0e5; background: var(--ink); }
+    .conversion-result .eyebrow { color: #9ba1a0; }
+    .conversion-result strong { display: block; margin-top: 9px; color: var(--gold-2); font-family: var(--serif); font-size: 36px; line-height: 1; letter-spacing: -.04em; }
+    .conversion-result small { display: block; margin-top: 9px; color: #b4b9b6; font-size: 10px; line-height: 1.45; }
+    .conversion-summary { display: grid; grid-template-columns: repeat(3,1fr); gap: 7px; margin-top: 14px; }
+    .conversion-summary div { padding: 9px; border: 1px solid rgba(255,255,255,.12); border-radius: 8px; background: rgba(255,255,255,.05); }
+    .conversion-summary span { display: block; color: #9ea5a3; font-size: 9px; }
+    .conversion-summary b { display: block; margin-top: 5px; color: #f8f0e5; font-family: var(--mono); font-size: 11px; }
+    .conversion-explainer .formula-box { margin: 15px 0; padding: 17px; border-radius: 12px; color: var(--gold-2); background: var(--ink); font-family: var(--mono); font-size: 15px; line-height: 1.6; }
+    .conversion-explainer .formula-box small { display: block; margin-top: 8px; color: #aeb4b2; font-family: var(--sans); font-size: 10px; line-height: 1.45; }
+    .conversion-math { padding: 12px; border: 1px solid var(--line); border-radius: 9px; color: var(--muted); background: #f7f4ee; font-family: var(--mono); font-size: 10px; line-height: 1.55; }
+    .conversion-math b { color: var(--ink); }
+    .conversion-note { margin-top: 12px; color: var(--muted); font-size: 10px; line-height: 1.5; }
+    .tools-row { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 16px; margin-top: 16px; }
+    .mini-tool { min-width: 0; }
+    .mini-tool .panel-heading { margin-bottom: 13px; }
+    .purity-tool { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+    .purity-tool .input-shell input { font-size: 12px; }
+    .shortcut-list { display: grid; gap: 7px; margin: 0; padding: 0; list-style: none; }
+    .shortcut-list li { position: relative; padding-left: 15px; color: var(--muted); font-size: 10px; line-height: 1.5; }
+    .shortcut-list li::before { content: "•"; position: absolute; left: 0; color: var(--gold); font-size: 16px; line-height: 1; }
+    .data-card + .data-card { margin-top: 16px; }
+    .thermal-source { color: var(--muted); font-family: var(--mono); font-size: 9px; }
+
     /* Starting skins: the calculator keeps the same information architecture while the visual language changes. */
     body[data-theme="atelier"] {
       --paper: #f0ebe2;
@@ -673,6 +706,13 @@
     body[data-theme="signal"] .data-footnote { background: #0e150f; border-color: var(--line); }
     body[data-theme="signal"] .data-table th,
     body[data-theme="signal"] .data-table td { border-color: var(--line); }
+    body[data-theme="foundry"] .conversion-select,
+    body[data-theme="signal"] .conversion-select { border-color: var(--line); color: var(--ink); background: #151a1d; }
+    body[data-theme="foundry"] .conversion-math,
+    body[data-theme="signal"] .conversion-math { border-color: var(--line); color: var(--muted); background: #202629; }
+    body[data-theme="signal"] .conversion-select { background: #0e150f; }
+    body[data-theme="foundry"] .conversion-result,
+    body[data-theme="signal"] .conversion-result { background: #020403; }
 
     @media (max-width: 1220px) { 
       .workspace-grid { grid-template-columns: minmax(240px,.85fr) minmax(330px,1.2fr); }
@@ -695,7 +735,7 @@
       .result-panel .panel-pad { display: block; }
       .result-top { border-radius: var(--radius) var(--radius) 0 0; }
       .result-body { border-radius: 0 0 var(--radius) var(--radius); }
-      .method-layout, .safety-section { grid-template-columns: 1fr; }
+      .method-layout, .safety-section, .conversion-layout, .tools-row { grid-template-columns: 1fr; }
       .guide-grid { grid-template-columns: 1fr; }
       .guide-card { min-height: 0; }
       .saved-grid { grid-template-columns: repeat(2,1fr); }
@@ -708,7 +748,8 @@
       .family-switcher { flex-direction: column; }
       .family-pill { width: 100%; }
       .calc-controls { grid-template-columns: 1fr; }
-      .guard-controls { grid-template-columns: 1fr; }
+      .guard-controls, .conversion-fields, .purity-tool { grid-template-columns: 1fr; }
+      .conversion-summary { grid-template-columns: 1fr; }
       .unit-toggle { height: 40px; }
       .steps { grid-template-columns: 1fr; }
       .steps li { min-height: 0; }
@@ -750,6 +791,7 @@
         <button class="nav-item" data-view="saved"><span class="nav-number">02</span><span class="nav-icon">◇</span><span>Saved recipes</span></button>
         <button class="nav-item" data-view="process"><span class="nav-number">03</span><span class="nav-icon">⌁</span><span>Process notes</span></button>
         <button class="nav-item" data-view="data"><span class="nav-number">04</span><span class="nav-icon">≡</span><span>Data notes</span></button>
+        <button class="nav-item" data-view="conversion"><span class="nav-number">05</span><span class="nav-icon">↔</span><span>Conversion</span></button>
       </nav>
       <div class="side-card">
         <span class="eyebrow">Workshop mode</span>
@@ -757,7 +799,7 @@
         <p>Start with clean, known metal. Finish with an assay, not a guess.</p>
         <div class="local-status"><span class="status-dot"></span> local only · nothing leaves the bench</div>
       </div>
-      <div class="side-footer">v0.1 · reviewed 22 AUG 2026</div>
+      <div class="side-footer">v0.2 · reviewed 24 AUG 2026</div>
     </aside>
 
     <main class="main">
@@ -953,6 +995,61 @@
               <p>Charge allowance adds material proportionally; it does not protect fineness. The guard raises the final precious-metal target, then the retention model back-calculates the raw charge. For gold, carat is Au fraction × 24; for platinum, use Pt parts per thousand.</p>
             </section>
           </div>
+        </section>
+
+        <!-- CONVERSION VIEW -->
+        <section class="view" id="view-conversion">
+          <div class="view-heading"><div><span class="eyebrow">Volume equivalent</span><h1>Convert the weight.</h1></div><p>Use density to convert the weight of a known alloy into the weight of another alloy occupying the same volume. This is a mass conversion, not a fineness conversion.</p></div>
+          <div class="conversion-layout">
+            <section class="panel conversion-card">
+              <div class="panel-heading"><div><span class="eyebrow">Start with a known piece</span><h2>Set the two alloys</h2><p>Supplier-sheet density is used where available; other recipes are marked approximate.</p></div><span class="panel-number">01</span></div>
+              <div class="conversion-fields">
+                <div class="field"><label for="conversionWeight">Known weight <span>same volume</span></label><div class="input-shell"><input id="conversionWeight" type="number" inputmode="decimal" min="0" step="0.01" value="50"><span class="input-unit" id="conversionUnitLabel">g</span></div></div>
+                <div class="field"><label for="conversionUnit">Unit</label><select class="conversion-select" id="conversionUnit" aria-label="Conversion weight unit"><option value="g">grams (g)</option><option value="dwt">pennyweight (dwt)</option><option value="oz">troy ounces (oz tr)</option></select></div>
+              </div>
+              <div class="conversion-fields">
+                <div class="field"><label for="conversionKnown">Known alloy</label><select class="conversion-select" id="conversionKnown"></select></div>
+                <div class="field"><label for="conversionTarget">Target alloy</label><select class="conversion-select" id="conversionTarget"></select></div>
+              </div>
+              <div class="conversion-actions"><span class="micro-copy">Known alloy → target alloy</span><button class="swap-button" id="swapConversion">⇄ Swap alloys</button></div>
+              <div class="conversion-result">
+                <span class="eyebrow">Equivalent target weight</span>
+                <strong id="conversionResult">35.98 g</strong>
+                <small id="conversionResultSub">50.00 g of 18 ct Yellow → the same volume in 9 ct Yellow</small>
+                <div class="conversion-summary"><div><span>Known density</span><b id="conversionKnownDensity">15.51</b></div><div><span>Target density</span><b id="conversionTargetDensity">11.16</b></div><div><span>Volume</span><b id="conversionVolume">3.22 cm³</b></div></div>
+              </div>
+            </section>
+            <section class="panel conversion-explainer">
+              <div class="panel-heading"><div><span class="eyebrow">The formula</span><h2>Compare density, not carat.</h2></div><span class="panel-number">02</span></div>
+              <div class="formula-box">density of target<br>────────────── × known weight = target weight<small>density of known</small></div>
+              <div class="conversion-math" id="conversionMath">11.16 ÷ 15.51 × 50.00 g = 35.98 g</div>
+              <p class="conversion-note">This assumes the object’s volume is unchanged. It is useful for comparing castings, estimating equivalent weights and planning a remake. Use the exact supplier density when the material matters.</p>
+              <div class="temperature-note">The calculator does not infer a new alloy recipe here. It only answers: “What mass of the target alloy occupies the same volume?”</div>
+            </section>
+          </div>
+
+          <div class="tools-row">
+            <section class="panel panel-pad mini-tool">
+              <div class="panel-heading"><div><span class="eyebrow">Quick tool</span><h3>Karat ↔ fineness</h3><p>Gold only; platinum and silver use fineness directly.</p></div><span class="panel-number">03</span></div>
+              <div class="purity-tool"><div class="field"><label for="karatTool">Karat <span>K</span></label><div class="input-shell"><input id="karatTool" type="number" min="0" max="24" step="0.01" value="18"><span class="input-unit">K</span></div></div><div class="field"><label for="finenessTool">Fineness <span>‰</span></label><div class="input-shell"><input id="finenessTool" type="number" min="0" max="1000" step="1" value="750"><span class="input-unit">‰</span></div></div></div>
+              <p class="micro-copy" id="purityToolNote" style="margin:12px 0 0">18.00K = 750 fineness = 75.000% Au.</p>
+            </section>
+            <section class="panel panel-pad mini-tool">
+              <div class="panel-heading"><div><span class="eyebrow">Useful at the bench</span><h3>Quick reminders</h3></div><span class="panel-number">04</span></div>
+              <ul class="shortcut-list"><li>Density conversions compare like-for-like volume; they do not account for porosity, hollow sections or stones.</li><li>Use supplier density for a named grain or casting alloy whenever it is available.</li><li>Do not use the `X` density as if it were a real element; supplier density is the only usable value for an undisclosed balance.</li><li>For a new alloy, cast a small reference button and record its measured mass and volume.</li></ul>
+            </section>
+          </div>
+
+          <section class="data-card" style="margin-top:16px">
+            <div class="data-card-header"><h2>Element density &amp; thermal reference</h2><p>Pure-element reference values. Alloy temperatures are listed separately below and should be treated as approximate unless taken from a supplier sheet.</p></div>
+            <div class="data-table-wrap"><table class="data-table"><thead><tr><th>Element</th><th>Symbol</th><th>Density g/cm³</th><th>Pure melting °C</th><th>Bench role</th></tr></thead><tbody id="elementDensityBody"></tbody></table></div>
+            <div class="data-footnote"><b>Use carefully:</b> pure-element density and melting points are orientation references. Alloy density and melting range depend on composition and commercial formulation.</div>
+          </section>
+          <section class="data-card">
+            <div class="data-card-header"><h2>Alloy density / melt / cast sheet</h2><p>Supplier values are shown where a PDF sheet supplied them; typical recipes without a sheet are labelled approximate.</p></div>
+            <div class="data-table-wrap"><table class="data-table"><thead><tr><th>Alloy</th><th>Density</th><th>Melting range</th><th>Flask</th><th>Casting range</th><th>Cooling / route</th></tr></thead><tbody id="thermalBody"></tbody></table></div>
+            <div class="data-footnote"><b>Temperature warning:</b> do not copy a number from this reference table into a machine programme without checking the exact alloy TDS, crucible, investment and casting machine.</div>
+          </section>
         </section>
 
         <!-- SAVED RECIPES VIEW -->
@@ -1183,6 +1280,29 @@
     const UNIT_TO_GRAMS = { g: 1, dwt: 1.55517384, oz: 31.1034768 };
     const UNIT_LABELS = { g: 'g', dwt: 'dwt', oz: 'oz tr' };
     const UNIT_LONG = { g: 'grams', dwt: 'pennyweight', oz: 'troy ounces' };
+    const ELEMENT_REFERENCE = [
+      { el:'Au', density:19.32, melting:1064, role:'precious base / yellow colour' },
+      { el:'Ag', density:10.49, melting:962, role:'white / cools yellow alloys' },
+      { el:'Cu', density:8.96, melting:1085, role:'hardens / warms colour' },
+      { el:'Zn', density:7.14, melting:420, role:'volatile / deoxidising addition' },
+      { el:'Pd', density:12.02, melting:1555, role:'white-gold / Pt addition' },
+      { el:'Ni', density:8.91, melting:1455, role:'white-gold hardener / allergy check' },
+      { el:'Al', density:2.70, melting:660, role:'speciality Au-Al / brittle risk' },
+      { el:'Pt', density:21.45, melting:1768, role:'platinum base' },
+      { el:'Co', density:8.90, melting:1495, role:'Pt casting / hardener' },
+      { el:'Ru', density:12.37, melting:2334, role:'Pt hardener / high-temperature' },
+      { el:'Ir', density:22.56, melting:2466, role:'Pt hardener / work-hardening' },
+      { el:'X', density:null, melting:null, role:'supplier balance not disclosed' }
+    ];
+    const ELEMENT_REFERENCE_BY = Object.fromEntries(ELEMENT_REFERENCE.map(item => [item.el, item]));
+    const DENSITY_OVERRIDES = {
+      'g-9-y':11.16, 'g-10-y':11.75, 'g-14-y':13.10, 'g-18-y':15.51, 'g-22-y':17.50, 'g-24':19.32,
+      'g-9-r':11.30, 'g-10-r':12.00, 'g-14-r':13.50, 'g-18-r':15.10, 'g-22-r':17.30,
+      'g-9-w-pd':12.55, 'g-10-w-pd':13.10, 'g-14-w-pd':14.20, 'g-18-w-pd':15.80,
+      'g-10-w-ni':11.40, 'g-14-w-ni':13.20, 'g-18-w-ni':15.50,
+      'g-14-green':13.20, 'g-18-green':15.80, 'g-18-purple':15.00,
+      'pt-950-co':20.80, 'pt-950-ru':20.65, 'pt-900-ir':21.40, 'pt-950-ir':21.50, 'pt-950-cu':20.00, 'pt-950-pd':20.20, 'pt-900-pd':20.00
+    };
 
     const $ = (sel, root=document) => root.querySelector(sel);
     const $$ = (sel, root=document) => Array.from(root.querySelectorAll(sel));
@@ -1391,6 +1511,102 @@
     function renderRegion() {
       $$('.region-button').forEach(btn => btn.classList.toggle('active', btn.dataset.region === state.region));
       $('#regionNote').innerHTML = REGIONS[state.region].note;
+    }
+
+    function densityInfo(recipe) {
+      if (!recipe) return { value:null, source:'unknown' };
+      const stated = recipe.density ? parseFloat(String(recipe.density).replace(',', '.')) : NaN;
+      if (Number.isFinite(stated)) return { value:stated, source:'supplier sheet' };
+      if (Number.isFinite(DENSITY_OVERRIDES[recipe.id])) return { value:DENSITY_OVERRIDES[recipe.id], source:'preset estimate' };
+      const composition = componentPairs(recipe);
+      const total = composition.reduce((sum, row) => sum + Math.max(0, num(row.pct)), 0);
+      if (!total) return { value:null, source:'unknown' };
+      let reciprocal = 0;
+      for (const row of composition) {
+        const reference = ELEMENT_REFERENCE_BY[row.el];
+        if (!reference || !Number.isFinite(reference.density)) return { value:null, source:'unknown balance' };
+        reciprocal += (Math.max(0, num(row.pct)) / total) / reference.density;
+      }
+      return reciprocal > 0 ? { value:1 / reciprocal, source:'calculated estimate' } : { value:null, source:'unknown' };
+    }
+    function alloyThermalInfo(recipe) {
+      const density = densityInfo(recipe);
+      if (recipe.meltRange || recipe.castingTemp) {
+        return { density, meltRange:recipe.meltRange || 'not stated', flaskTemp:recipe.flaskTemp || 'not stated', castingTemp:recipe.castingTemp || 'not stated', cooling:recipe.cooling || 'not stated', route:recipe.atmosphere || 'see supplier sheet', source:recipe.supplier ? `${recipe.supplier} · ${recipe.code || ''}` : 'supplier sheet' };
+      }
+      if (recipe.family === 'platinum') return { density, meltRange:'approx. 1750–1850 °C', flaskTemp:'approx. 850–1000 °C', castingTemp:'approx. 1950–2150 °C', cooling:'air / machine programme', route:'Pt-capable induction / vacuum', source:'typical estimate' };
+      if (recipe.family === 'silver') return { density, meltRange:'approx. 800–900 °C', flaskTemp:'approx. 550–650 °C', castingTemp:'approx. 950–1100 °C', cooling:'supplier / machine programme', route:'clean controlled melt', source:'typical estimate' };
+      const carat = parseFloat(String(recipe.carat || '').replace(/[^0-9.]/g, '')) || 18;
+      let meltRange = carat <= 10 ? 'approx. 850–950 °C' : carat >= 22 ? 'approx. 950–1050 °C' : 'approx. 880–1020 °C';
+      let castingTemp = carat <= 10 ? 'approx. 950–1050 °C' : carat >= 22 ? 'approx. 1050–1150 °C' : 'approx. 1000–1120 °C';
+      let flaskTemp = 'approx. 600 °C';
+      if (String(recipe.group || '').toLowerCase().includes('white')) { meltRange = 'approx. 980–1200 °C'; castingTemp = 'approx. 1100–1300 °C'; flaskTemp = 'approx. 650 °C'; }
+      return { density, meltRange, flaskTemp, castingTemp, cooling:'supplier / machine programme', route:'protective atmosphere preferred', source:'typical estimate' };
+    }
+    function renderConversionOptions() {
+      const selects = [$('#conversionKnown'), $('#conversionTarget')];
+      const groups = ['gold','platinum','silver'];
+      const html = groups.map(family => {
+        const recipes = RECIPES.filter(recipe => recipe.family === family && densityInfo(recipe).value);
+        if (!recipes.length) return '';
+        return `<optgroup label="${familyName(family)}">${recipes.map(recipe => { const density = densityInfo(recipe); return `<option value="${recipe.id}">${escapeHtml(recipe.title)} · ${fmt(density.value,2)} g/cm³</option>`; }).join('')}</optgroup>`;
+      }).join('');
+      selects.forEach(select => { if (select) select.innerHTML = html; });
+      if ($('#conversionKnown')) $('#conversionKnown').value = recipeById('g-18-y') ? 'g-18-y' : RECIPES[0].id;
+      if ($('#conversionTarget')) $('#conversionTarget').value = recipeById('g-9-y') ? 'g-9-y' : RECIPES[1]?.id || RECIPES[0].id;
+    }
+    function renderConversion() {
+      const known = recipeById($('#conversionKnown')?.value);
+      const target = recipeById($('#conversionTarget')?.value);
+      const unit = $('#conversionUnit')?.value || 'g';
+      const inputValue = Math.max(0, num($('#conversionWeight')?.value || 0));
+      const knownDensity = densityInfo(known);
+      const targetDensity = densityInfo(target);
+      $('#conversionUnitLabel').textContent = UNIT_LABELS[unit];
+      if (!known || !target || !knownDensity.value || !targetDensity.value) {
+        $('#conversionResult').textContent = 'Choose alloys with density data';
+        $('#conversionResultSub').textContent = 'The supplier sheet or a density estimate is required for this conversion.';
+        $('#conversionMath').textContent = 'target density ÷ known density × known weight = target weight';
+        return;
+      }
+      const knownGrams = inputValue * UNIT_TO_GRAMS[unit];
+      const targetGrams = knownGrams * targetDensity.value / knownDensity.value;
+      const volume = knownDensity.value > 0 ? knownGrams / knownDensity.value : 0;
+      const targetDisplay = targetGrams / UNIT_TO_GRAMS[unit];
+      $('#conversionResult').textContent = `${fmt(targetDisplay,2)} ${UNIT_LABELS[unit]}`;
+      $('#conversionResultSub').textContent = `${fmt(inputValue,2)} ${UNIT_LABELS[unit]} of ${known.title} → the same volume in ${target.title}`;
+      $('#conversionKnownDensity').textContent = `${fmt(knownDensity.value,2)}${knownDensity.source === 'supplier sheet' ? '' : ' ~'}`;
+      $('#conversionTargetDensity').textContent = `${fmt(targetDensity.value,2)}${targetDensity.source === 'supplier sheet' ? '' : ' ~'}`;
+      $('#conversionVolume').textContent = `${fmt(volume,2)} cm³`;
+      $('#conversionMath').innerHTML = `<b>${fmt(targetDensity.value,2)}</b> ÷ <b>${fmt(knownDensity.value,2)}</b> × <b>${fmt(inputValue,2)} ${UNIT_LABELS[unit]}</b> = <b>${fmt(targetDisplay,2)} ${UNIT_LABELS[unit]}</b>`;
+    }
+    function swapConversion() {
+      const known = $('#conversionKnown').value;
+      $('#conversionKnown').value = $('#conversionTarget').value;
+      $('#conversionTarget').value = known;
+      renderConversion();
+    }
+    function updatePurityFromKarat() {
+      const karat = clamp(num($('#karatTool').value), 0, 24);
+      const fineness = karat / 24 * 1000;
+      $('#finenessTool').value = Math.round(fineness * 10) / 10;
+      $('#purityToolNote').textContent = `${fmt(karat,2)}K = ${fmt(fineness,1)} fineness = ${fmt(karat / 24 * 100,3)}% Au.`;
+    }
+    function updatePurityFromFineness() {
+      const fineness = clamp(num($('#finenessTool').value), 0, 1000);
+      const karat = fineness / 1000 * 24;
+      $('#karatTool').value = Math.round(karat * 100) / 100;
+      $('#purityToolNote').textContent = `${fmt(karat,2)}K = ${fmt(fineness,1)} fineness = ${fmt(fineness / 10,3)}% Au.`;
+    }
+    function renderReferenceTables() {
+      $('#elementDensityBody').innerHTML = ELEMENT_REFERENCE.map(item => `<tr><td>${escapeHtml(ELEMENTS[item.el]?.name?.split(' · ')[0] || item.el)}</td><td>${escapeHtml(item.el)}</td><td>${item.density == null ? '—' : fmt(item.density,2)}</td><td>${item.melting == null ? '—' : fmt(item.melting,0)}</td><td>${escapeHtml(item.role)}</td></tr>`).join('');
+      $('#thermalBody').innerHTML = RECIPES.map(recipe => {
+        const density = densityInfo(recipe);
+        const thermal = alloyThermalInfo(recipe);
+        const densityText = density.value ? `${fmt(density.value,2)}${density.source === 'supplier sheet' ? '' : ' ~'}` : '—';
+        const source = recipe.supplier ? `${recipe.supplier} · ${recipe.code}` : 'typical';
+        return `<tr><td><b>${escapeHtml(recipe.title)}</b><br><span class="thermal-source">${escapeHtml(source)}</span></td><td>${densityText}</td><td>${escapeHtml(thermal.meltRange)}</td><td>${escapeHtml(thermal.flaskTemp)}</td><td>${escapeHtml(thermal.castingTemp)}</td><td>${escapeHtml(thermal.cooling)}<br><span class="thermal-source">${escapeHtml(thermal.route)}</span></td></tr>`;
+      }).join('');
     }
 
     function miniBar(recipe) {
@@ -1790,9 +2006,10 @@
     function showView(name) {
       $$('.view').forEach(view => view.classList.toggle('active', view.id === 'view-' + name));
       $$('.nav-item').forEach(item => item.classList.toggle('active', item.dataset.view === name));
-      $('#crumbText').textContent = name === 'saved' ? 'Saved recipes' : name === 'process' ? 'Process notes' : name === 'data' ? 'Data notes' : 'Calculator';
+      $('#crumbText').textContent = name === 'saved' ? 'Saved recipes' : name === 'process' ? 'Process notes' : name === 'data' ? 'Data notes' : name === 'conversion' ? 'Conversion' : 'Calculator';
       $('#sidebar').classList.remove('open');
       if (name === 'saved') renderSavedRecipes();
+      if (name === 'conversion') renderConversion();
       window.scrollTo({top:0, behavior:'smooth'});
     }
 
@@ -1803,6 +2020,7 @@
       state.recipe = makeRecipe(recipeById('g-18-y'));
       state.recipeId = state.recipe.id;
       renderRegion(); renderRecipes(); renderComposition(); renderResults(); renderProcess(); renderTopContext();
+      renderConversionOptions(); renderReferenceTables(); renderConversion(); updatePurityFromKarat();
 
       $$('.nav-item').forEach(btn => btn.addEventListener('click', () => showView(btn.dataset.view)));
       $$('.family-pill').forEach(btn => btn.addEventListener('click', () => {
@@ -1888,6 +2106,13 @@
         }
       });
       $('#menuButton').addEventListener('click', () => $('#sidebar').classList.toggle('open'));
+      $('#conversionWeight').addEventListener('input', renderConversion);
+      $('#conversionUnit').addEventListener('change', renderConversion);
+      $('#conversionKnown').addEventListener('change', renderConversion);
+      $('#conversionTarget').addEventListener('change', renderConversion);
+      $('#swapConversion').addEventListener('click', swapConversion);
+      $('#karatTool').addEventListener('input', updatePurityFromKarat);
+      $('#finenessTool').addEventListener('input', updatePurityFromFineness);
       $('#backToCalc').addEventListener('click', event => { event.preventDefault(); showView('calculator'); });
     }
 

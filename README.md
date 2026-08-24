@@ -25,6 +25,9 @@ A self-contained, browser-only alloying calculator for a jewellery casting works
   - torch / bench work
 - Safety notes for zinc, nickel, cadmium, beryllium, platinum temperature, moisture and crucible segregation
 - Data notes and source links
+- Conversion tool using the density formula from the supplied reference image
+- Element density / pure melting-point reference table and an alloy density / melt / cast table
+- Quick karat ↔ fineness converter
 - Five switchable visual skins in the Style menu: Bench, Atelier, Ledger, Foundry and Signal
 
 ## Run it locally
