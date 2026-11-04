@@ -793,6 +793,36 @@
 .topbar{background:rgba(245,242,236,.96)!important;border-bottom:1px solid #e5dfd5!important}
 h1,h2,h3,h1 em,.hero-stamp .stamp-mark{font-family:"Bodoni Moda",Georgia,serif!important;font-weight:500!important}
 .panel,.side-card,.hero-stamp{box-shadow:0 5px 18px rgba(32,28,20,.035)!important}
+
+/* TJ Gold & Diamond — shared workshop visual language. */
+:root{--tj-ivory:#f5f1e9;--tj-paper:#fffdf9;--tj-charcoal:#1c1c1c;--tj-gold:#c9a24a;--tj-border:#dfd5c7}
+body{background:var(--tj-ivory)!important;color:#202020!important}
+.sidebar{background:#fff!important;color:#202020!important;border-right:1px solid #e5dfd5!important;box-shadow:4px 0 20px rgba(32,28,20,.035)!important}
+.topbar{background:rgba(245,241,233,.97)!important;border-bottom:1px solid #e5dfd5!important}
+.hero-row{position:relative;min-height:300px;align-items:center!important;margin:0 0 28px!important;padding:38px 42px!important;overflow:hidden;border-top:4px solid var(--tj-gold);border-radius:0 0 7px 7px;background-color:var(--tj-charcoal)!important;background-image:linear-gradient(90deg,#1c1c1c 0%,rgba(28,28,28,.96) 43%,rgba(28,28,28,.42) 72%,rgba(28,28,28,.12) 100%),url("https://raw.githubusercontent.com/Triumphmotorcycle/workshop-system/design/premium-tj-workshop-hub/public/casting-hero.webp")!important;background-size:cover,cover!important;background-position:center,right center!important}
+.hero-copy{position:relative;z-index:1}
+.hero-copy .eyebrow{color:#d9b45d!important}
+.hero-copy h1{color:#fff!important;font-family:"Bodoni Moda",Georgia,serif!important;font-weight:400!important;letter-spacing:-.025em!important}
+.hero-copy>p{color:#eee8dd!important}
+.hero-stamp{position:relative;z-index:1;background:rgba(20,20,20,.78)!important;border:1px solid rgba(220,184,112,.42)!important;color:#fff!important;backdrop-filter:blur(5px)}
+.hero-stamp .stamp-top,.hero-stamp .stamp-foot{color:#e1c17e!important}
+.hero-stamp .stamp-mark{color:#fff!important}
+.panel,.recipe-card,.data-card,.guide-card,.source-card,.metric,.check-item{background:var(--tj-paper)!important;border-color:var(--tj-border)!important;color:#202020!important;box-shadow:0 4px 16px rgba(32,28,20,.035)!important}
+.panel h2,.panel h3,.panel strong,.recipe-card strong{color:#202020!important}
+.panel p,.panel small,.micro-copy,.recipe-card small{color:#625e58!important}
+button.primary-button,.primary-button{background:#d9b45d!important;color:#171717!important;border:1px solid #c59b46!important;border-radius:5px!important}
+button.primary-button:hover,.primary-button:hover{background:#e4c477!important}
+input,select,textarea,.input-shell,.unit-toggle,.allowance-line,.guard-details{background:#fff!important;color:#202020!important;border-color:#d8d0c3!important}
+input:focus,select:focus,textarea:focus,.input-shell:focus-within{border-color:#b58a3b!important;box-shadow:0 0 0 2px rgba(181,138,59,.14)!important}
+.nav-item{color:#514b43!important}.nav-item.active{color:#76551f!important;background:#f8f2e7!important}
+.side-label,.side-footer{color:#786f62!important}
+.side-footer{padding:14px 10px!important;border-top:4px solid var(--tj-gold)!important;background:var(--tj-charcoal)!important;color:#eee8dd!important}
+@media(max-width:900px){.hero-row{padding:28px 24px!important;min-height:260px}}
+
+.brand-logo{width:220px!important;height:auto!important;max-height:58px!important;object-fit:contain!important;object-position:left center!important}
+/* Keep the TJ wordmark black against the ivory workshop sidebar. */
+.brand-logo{filter:brightness(0) saturate(100%)!important;background:transparent!important}
+@media(max-width:760px){.brand-logo{width:190px!important;max-height:50px!important}}
 </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -801,7 +831,7 @@ h1,h2,h3,h1 em,.hero-stamp .stamp-mark{font-family:"Bodoni Moda",Georgia,serif!i
   <div class="app-shell">
     <aside class="sidebar" id="sidebar">
       <div class="brand">
-        <img class="brand-logo" src="https://raw.githubusercontent.com/Triumphmotorcycle/tj-alloying-calculator/main/TJ-Gold-and-Diamond-Logo.png" alt="TJ Gold & Diamond">
+        <img class="brand-logo" src="TJ-Gold-and-Diamond-Logo.png" alt="TJ Gold & Diamond">
         <div><strong>CAST/FORM</strong><span>Alloying Calculator</span></div>
       </div>
       <div class="side-rule"></div>
