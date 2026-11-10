@@ -14,8 +14,8 @@
       --paper: #f5f2ec;
       --paper-2: #fbfaf7;
       --line: #e4ded4;
-      --muted: #7d807f;
-      --muted-2: #a7aaa7;
+      --muted: #656b68;
+      --muted-2: #626966;
       --gold: #d2a654;
       --gold-2: #f2cc79;
       --gold-dark: #936b27;
@@ -488,7 +488,7 @@
     .data-table-wrap { overflow-x: auto; }
     .data-table { width: 100%; min-width: 700px; border-collapse: collapse; }
     .data-table th { padding: 10px 22px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); color: var(--muted-2); font-family: var(--mono); font-size: 9px; font-weight: 400; text-align: left; text-transform: uppercase; }
-    .data-table td { padding: 12px 22px; border-bottom: 1px solid #eeeae3; color: #636662; font-size: 10px; }
+    .data-table td { padding: 12px 22px; border-bottom: 1px solid #eeeae3; color: var(--muted); font-size: 10px; }
     .data-table tr:last-child td { border-bottom: 0; }
     .data-table td:first-child { color: var(--ink); font-family: var(--mono); font-weight: 700; }
     .source-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 10px; padding: 0 22px 22px; }
@@ -542,8 +542,8 @@
       --paper-2: #fffaf3;
       --ink: #2b211b;
       --line: #dfd1bc;
-      --muted: #81756a;
-      --muted-2: #a99b8c;
+      --muted: #6d6258;
+      --muted-2: #6b5c50;
       --gold: #ad792e;
       --gold-2: #e6bc6d;
       --gold-dark: #83551c;
@@ -562,8 +562,8 @@
       --paper-2: #ffffff;
       --ink: #17343a;
       --line: #c9d9d6;
-      --muted: #637b7e;
-      --muted-2: #92a8a7;
+      --muted: #557174;
+      --muted-2: #587174;
       --gold: #3c927e;
       --gold-2: #a6e0c3;
       --gold-dark: #1e7164;
@@ -584,8 +584,8 @@
       --paper-2: #1b2023;
       --ink: #edf2ee;
       --line: #313a3f;
-      --muted: #9aa5a6;
-      --muted-2: #707b7e;
+      --muted: #aeb8b8;
+      --muted-2: #aeb8b8;
       --gold: #dc874c;
       --gold-2: #f2b577;
       --gold-dark: #ef9b5f;
@@ -649,8 +649,8 @@
       --paper-2: #141b16;
       --ink: #eff9ed;
       --line: #2c3d2e;
-      --muted: #9bb19c;
-      --muted-2: #708573;
+      --muted: #b0c3b0;
+      --muted-2: #b0c3b0;
       --gold: #31f51e;
       --gold-2: #7dff6f;
       --gold-dark: #23c719;
@@ -784,7 +784,7 @@
 .brand-logo{width:218px!important;height:auto!important;max-height:92px!important;object-fit:contain!important;background:transparent!important;filter:none!important;border:0!important;border-radius:0!important;box-shadow:none!important}
 .brand strong,.brand span{display:none!important}
 .side-rule{background:#e5dfd5!important;margin:20px 9px 18px!important}
-.side-label{color:#8b8378!important}
+.side-label{color:#6f675d!important}
 .nav-item{color:#393630!important}
 .nav-item:hover{color:#76551f!important;background:#f8f2e7!important}
 .nav-item.active{color:#76551f!important;background:#f8f2e7!important;border:1px solid #e2d2b0!important}
@@ -796,7 +796,7 @@ h1,h2,h3,h1 em,.hero-stamp .stamp-mark{font-family:"Bodoni Moda",Georgia,serif!i
 
 /* TJ Gold & Diamond — shared workshop visual language. */
 :root{--tj-ivory:#f5f1e9;--tj-paper:#fffdf9;--tj-charcoal:#1c1c1c;--tj-gold:#c9a24a;--tj-border:#dfd5c7}
-body{background:var(--tj-ivory)!important;color:#202020!important}
+body{background:var(--tj-ivory)!important;color:var(--ink)!important}
 .sidebar{background:#fff!important;color:#202020!important;border-right:1px solid #e5dfd5!important;box-shadow:4px 0 20px rgba(32,28,20,.035)!important}
 .topbar{background:rgba(245,241,233,.97)!important;border-bottom:1px solid #e5dfd5!important}
 .hero-row{position:relative;min-height:300px;align-items:center!important;margin:0 0 28px!important;padding:38px 42px!important;overflow:hidden;border-top:4px solid var(--tj-gold);border-radius:0 0 7px 7px;background-color:var(--tj-charcoal)!important;background-image:linear-gradient(90deg,#1c1c1c 0%,rgba(28,28,28,.96) 43%,rgba(28,28,28,.42) 72%,rgba(28,28,28,.12) 100%),url("https://raw.githubusercontent.com/Triumphmotorcycle/workshop-system/design/premium-tj-workshop-hub/public/casting-hero.webp")!important;background-size:cover,cover!important;background-position:center,right center!important}
@@ -821,7 +821,61 @@ input:focus,select:focus,textarea:focus,.input-shell:focus-within{border-color:#
 /* Keep the TJ wordmark black against the ivory workshop sidebar. */
 .brand-logo{filter:brightness(0) saturate(100%)!important;background:transparent!important}
 @media(max-width:760px){.brand-logo{width:190px!important;max-height:50px!important}}
-</style>
+
+/* Contrast corrections for dark-theme content cards and secondary text. */
+body[data-theme="foundry"] .conversion-explainer .formula-box,
+body[data-theme="signal"] .equation,
+body[data-theme="signal"] .conversion-explainer .formula-box {
+  background: #202629;
+}
+body[data-theme="foundry"] .method-side li,
+body[data-theme="signal"] .method-side li,
+body[data-theme="foundry"] .method-callout,
+body[data-theme="signal"] .method-callout,
+body[data-theme="foundry"] .guard-intro,
+body[data-theme="signal"] .guard-intro,
+body[data-theme="foundry"] .guide-card li,
+body[data-theme="signal"] .guide-card li,
+body[data-theme="foundry"] .danger-item span,
+body[data-theme="signal"] .danger-item span {
+  color: #d0d7d3;
+}
+body[data-theme="foundry"] .method-callout,
+body[data-theme="signal"] .method-callout {
+  border-color: var(--line);
+  background: rgba(255,255,255,.06);
+}
+body[data-theme="foundry"] .method-callout b,
+body[data-theme="signal"] .method-callout b,
+body[data-theme="foundry"] .guard-intro b,
+body[data-theme="signal"] .guard-intro b,
+body[data-theme="foundry"] .danger-item strong,
+body[data-theme="signal"] .danger-item strong {
+  color: #f4ecdf;
+}
+body[data-theme="foundry"] .supplier-unknown,
+body[data-theme="signal"] .supplier-unknown {
+  color: #d9c28e;
+}
+body[data-theme="foundry"] .supplier-unknown b,
+body[data-theme="signal"] .supplier-unknown b {
+  color: #f4ecdf;
+}
+body[data-theme="foundry"] .method-side .side-heading i,
+body[data-theme="signal"] .method-side .side-heading i {
+  color: #17251d;
+}
+body[data-theme="foundry"] .saved-card-actions button,
+body[data-theme="signal"] .saved-card-actions button {
+  color: #202020;
+  background: #fff;
+}
+body[data-theme="foundry"] .saved-card-actions .delete-saved,
+body[data-theme="signal"] .saved-card-actions .delete-saved {
+  color: #9b3730;
+}
+
+  </style>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600&display=swap" rel="stylesheet">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400;6..96,500;6..96,600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
