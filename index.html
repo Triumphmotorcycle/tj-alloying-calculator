@@ -807,13 +807,14 @@ body{background:var(--tj-ivory)!important;color:var(--ink)!important}
 .hero-stamp{position:relative;z-index:1;background:rgba(20,20,20,.78)!important;border:1px solid rgba(220,184,112,.42)!important;color:#fff!important;backdrop-filter:blur(5px)}
 .hero-stamp .stamp-top,.hero-stamp .stamp-foot{color:#e1c17e!important}
 .hero-stamp .stamp-mark{color:#fff!important}
-.panel,.recipe-card,.data-card,.guide-card,.source-card,.metric,.check-item{background:var(--tj-paper)!important;border-color:var(--tj-border)!important;color:#202020!important;box-shadow:0 4px 16px rgba(32,28,20,.035)!important}
+.panel{background:var(--tj-paper)!important;border-color:var(--tj-border)!important;color:#202020!important;box-shadow:0 4px 16px rgba(32,28,20,.035)!important}
+.recipe-card,.data-card,.guide-card,.source-card,.metric,.check-item{background:var(--tj-paper)!important;border-color:var(--tj-border)!important;color:var(--ink)!important;box-shadow:0 4px 16px rgba(32,28,20,.035)!important}
 button.primary-button,.primary-button{background:#d9b45d!important;color:#171717!important;border:1px solid #c59b46!important;border-radius:5px!important}
 button.primary-button:hover,.primary-button:hover{background:#e4c477!important}
 input,select,textarea,.input-shell,.unit-toggle,.allowance-line,.guard-details{background:#fff!important;color:#202020!important;border-color:#d8d0c3!important}
 input:focus,select:focus,textarea:focus,.input-shell:focus-within{border-color:#b58a3b!important;box-shadow:0 0 0 2px rgba(181,138,59,.14)!important}
 .nav-item{color:#514b43!important}.nav-item.active{color:#76551f!important;background:#f8f2e7!important}
-.side-label,.side-footer{color:#786f62!important}
+.side-label,.side-footer{color:#6f675d!important}
 .side-footer{padding:14px 10px!important;border-top:4px solid var(--tj-gold)!important;background:var(--tj-charcoal)!important;color:#eee8dd!important}
 @media(max-width:900px){.hero-row{padding:28px 24px!important;min-height:260px}}
 
@@ -827,6 +828,10 @@ body[data-theme="foundry"] .conversion-explainer .formula-box,
 body[data-theme="signal"] .equation,
 body[data-theme="signal"] .conversion-explainer .formula-box {
   background: #202629;
+}
+body[data-theme="foundry"] .guard-details,
+body[data-theme="signal"] .guard-details {
+  color: var(--ink) !important;
 }
 body[data-theme="foundry"] .method-side li,
 body[data-theme="signal"] .method-side li,
